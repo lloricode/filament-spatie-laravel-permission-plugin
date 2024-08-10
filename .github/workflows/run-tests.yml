@@ -14,12 +14,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         php: [8.3, 8.2]
-        laravel: [11.15]
+        laravel: [^11.15]
         stability: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 11.15
-            testbench: 9.*
-            carbon: 2.*
+          - laravel: ^11.15
+            testbench: ^9.2
+            carbon: ^2.75.5
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
