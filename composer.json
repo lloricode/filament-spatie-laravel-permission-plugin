@@ -1,29 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "lloricode/filament-spatie-laravel-permission-plugin",
+    "description": "This is my package filament-spatie-laravel-permission-plugin",
     "keywords": [
-        ":vendor_name",
+        "lloricode",
         "laravel",
-        ":package_slug"
+        "filament-spatie-laravel-permission-plugin"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/lloricode/filament-spatie-laravel-permission-plugin",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/lloricode/filament-spatie-laravel-permission-plugin/issues",
+        "source": "https://github.com/lloricode/filament-spatie-laravel-permission-plugin"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Lloric Mayuga Garcia",
+            "email": "lloricode@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
         "filament/filament": "^3.0",
-        "filament/forms": "^3.0",
-        "filament/tables": "^3.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -41,13 +39,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\": "src/",
+            "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -67,10 +65,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\FilamentSpatieLaravelPermissionPluginServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentSpatieLaravelPermissionPlugin": "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\Facades\\FilamentSpatieLaravelPermissionPlugin"
             }
         }
     },
