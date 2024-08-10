@@ -17,12 +17,6 @@ You can install the package via composer:
 composer require lloricode/filament-spatie-laravel-permission-plugin
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="filament-spatie-laravel-permission-plugin-migrations"
-php artisan migrate
-```
 
 You can publish the config file with:
 
@@ -30,24 +24,38 @@ You can publish the config file with:
 php artisan vendor:publish --tag="filament-spatie-laravel-permission-plugin-config"
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="filament-spatie-laravel-permission-plugin-views"
-```
-
 This is the contents of the published config file:
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 return [
+    'roles' => [
+        'super_admin' => 'super_admin',
+        'admin' => 'admin',
+    ],
+    'extra_roles' => [
+
+    ],
+
+    'seeders' => [
+        'roles' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultRoleSeeder::class,
+        'permissions' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder::class,
+    ],
 ];
+
 ```
 
 ## Usage
 
 ```php
-$filamentSpatieLaravelPermissionPlugin = new Lloricode\FilamentSpatieLaravelPermissionPlugin();
-echo $filamentSpatieLaravelPermissionPlugin->echoPhrase('Hello, Lloricode!');
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionPlugin;
+
+->plugins([
+    FilamentPermissionPlugin::make(),
+])
 ```
 
 ## Testing
