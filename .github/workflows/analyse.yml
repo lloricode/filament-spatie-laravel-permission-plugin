@@ -1,10 +1,15 @@
-name: PHPStan
+name: Static Analysis (PHPStan)
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '**.php'
-      - 'phpstan.neon.dist'
+      - 'phpstan.neon'
+  pull_request:
+#  schedule:
+#    - cron: '0 0 * * 5'
 
 jobs:
   phpstan:
