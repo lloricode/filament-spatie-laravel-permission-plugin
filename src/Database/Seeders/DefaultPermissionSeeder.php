@@ -45,7 +45,6 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         foreach (Filament::getResources() as $filamentResource) {
 
             $modelPolicy = Gate::getPolicyFor($filamentResource::getModel());
-            ray($filamentResource, $filamentResource::getModel(), $modelPolicy);
 
             $permissionsByPolicy = $permissionsByPolicy->merge(
                 self::generateFilamentResourcePermissions($modelPolicy::class)
