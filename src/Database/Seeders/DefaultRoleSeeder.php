@@ -21,13 +21,14 @@ class DefaultRoleSeeder extends Seeder
      */
     public function run(): void
     {
+        $guard = Config::string('filament-permission.guard');
         foreach (Config::array('filament-permission.roles') as $roleName) {
             Artisan::call(CreateRole::class, [
                 'name' => $roleName,
-                'guard' => 'admin',
+                'guard' => $guard,
                 'permissions' => config('filament-permission.roles.admin') === $roleName
                     ? $this->permissionContract
-                        ->where('guard_name', 'admin')
+                        ->where('guard_name', $guard)
                         ->pluck('name')
                         ->implode('|')
                     : null,
@@ -36,7 +37,7 @@ class DefaultRoleSeeder extends Seeder
         foreach (Config::array('filament-permission.extra_roles') as $roleName) {
             Artisan::call(CreateRole::class, [
                 'name' => $roleName,
-                'guard' => 'admin',
+                'guard' => $guard,
             ]);
         }
 

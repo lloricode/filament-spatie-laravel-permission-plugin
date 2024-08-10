@@ -9,9 +9,9 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Support\Str;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Permission;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Role;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Support\PermissionData;
+use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\PermissionRegistrar;
 
 final class PermissionSchema
@@ -217,7 +217,7 @@ final class PermissionSchema
             fn () => app(PermissionRegistrar::class)
                 ->getPermissions(['guard_name' => self::$guardName])
                 ->sortBy('name')
-                ->map(fn (Permission $permission): PermissionData => new PermissionData($permission->name))
+                ->map(fn (PermissionContract $permission): PermissionData => new PermissionData($permission->name))
         );
     }
 

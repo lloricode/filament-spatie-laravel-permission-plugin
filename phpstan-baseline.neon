@@ -6,6 +6,6 @@ parameters:
 			path: src/Resources/RoleResource/Schema/PermissionSchema.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Support\\\\PermissionData, Closure\\(Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Models\\\\Permission\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Support\\\\PermissionData given\\.$#"
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Support\\\\PermissionData, Closure\\(Spatie\\\\Permission\\\\Contracts\\\\Permission\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Support\\\\PermissionData given\\.$#"
 			count: 1
 			path: src/Resources/RoleResource/Schema/PermissionSchema.php

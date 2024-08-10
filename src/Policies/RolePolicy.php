@@ -6,7 +6,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Policies;
 
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Config;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Role;
+use Spatie\Permission\Contracts\Role as RoleContract;
 
 class RolePolicy
 {
@@ -14,7 +14,7 @@ class RolePolicy
 
     public function before(?User $user, string $ability, mixed $role = null): ?bool
     {
-        if ($role instanceof Role) {
+        if ($role instanceof RoleContract) {
 
             if (in_array($role->name, Config::array('filament-permission.roles'), true)) {
                 return false;
@@ -38,12 +38,12 @@ class RolePolicy
         return $this->checkWildcardPermissions($user);
     }
 
-    public function update(User $user, Role $role): bool
+    public function update(User $user, RoleContract $role): bool
     {
         return $this->checkWildcardPermissions($user);
     }
 
-    public function delete(User $user, Role $role): bool
+    public function delete(User $user, RoleContract $role): bool
     {
         return $this->checkWildcardPermissions($user);
     }

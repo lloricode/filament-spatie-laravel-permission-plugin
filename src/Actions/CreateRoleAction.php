@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Actions;
 
+use Illuminate\Database\Eloquent\Model;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\RoleData;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Role;
+use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\PermissionRegistrar;
 
 final readonly class CreateRoleAction
 {
-    public function execute(RoleData $roleData): Role
+    public function __construct(private PermissionRegistrar $permissionRegistrar) {}
+
+    public function execute(RoleData $roleData): RoleContract & Model
     {
-        /** @var Role $role */
-        $role = Role::create([
+        /** @var RoleContract&Model $role */
+        $role = $this->permissionRegistrar->getRoleClass()::create([
             'name' => $roleData->name,
             'guard_name' => $roleData->guard_name,
         ]);

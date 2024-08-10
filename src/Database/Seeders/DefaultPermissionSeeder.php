@@ -8,6 +8,7 @@ use Exception;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
@@ -20,7 +21,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     protected function permissionsByGuard(): array
     {
         return [
-            'admin' => self::getPermissionsFromPanels()
+            Config::string('filament-permission.guard') => self::getPermissionsFromPanels()
                 ->merge(self::getPermissionsFromResourceModelPolicies())
                 ->merge(self::getPermissionsFromWidgets())
                 ->merge(self::getPermissionsFromPages())

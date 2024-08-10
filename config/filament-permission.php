@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 return [
+    'guard' => 'web',
     'roles' => [
         'super_admin' => 'super_admin',
         'admin' => 'admin',

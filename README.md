@@ -28,6 +28,7 @@ This is the contents of the published config file:
 declare(strict_types=1);
 
 return [
+    'guard' => 'web',
     'roles' => [
         'super_admin' => 'super_admin',
         'admin' => 'admin',

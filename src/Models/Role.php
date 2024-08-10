@@ -6,6 +6,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Models;
 
 use Illuminate\Database\Eloquent\HasBuilder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\EloquentBuilder\RoleEloquentBuilder;
 
 /**
@@ -43,11 +44,11 @@ class Role extends \Spatie\Permission\Models\Role
         return Role::findByNameOnceCached(config('filament-permission.roles.admin'));
     }
 
-    public static function findByNameOnceCached(string $name): self
+    public static function findByNameOnceCached(string $name, ?string $guard = null): self
     {
-        return once(function () use ($name) {
+        return once(function () use ($name, $guard) {
             /** @var self $role */
-            $role = static::findByName($name, 'admin');
+            $role = static::findByName($name, $guard ?? Config::string('filament-permission.guard'));
 
             return $role;
         });
