@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
@@ -12,23 +14,13 @@ use Filament\Notifications\NotificationsServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentSpatieLaravelPermissionPluginServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentSpatieLaravelPermissionPluginServiceProvider;
 
 class TestCase extends Orchestra
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Lloricode\\FilamentSpatieLaravelPermissionPlugin\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
-        );
-    }
-
     protected function getPackageProviders($app)
     {
         return [

@@ -1,5 +1,12 @@
 {
     "preset": "laravel",
+    "exclude": [
+        "build"
+    ],
+    "notPath": [
+        "ray.php"
+    ],
+    "cache-file": "build/pint",
     "rules": {
         "blank_line_before_statement": true,
         "concat_space": {
@@ -9,6 +16,9 @@
         "single_trait_insert_per_statement": true,
         "types_spaces": {
             "space": "single"
-        }
+        },
+        "declare_strict_types": true,
+        "strict_comparison":  true,
+        "strict_param":  true
     }
 }
