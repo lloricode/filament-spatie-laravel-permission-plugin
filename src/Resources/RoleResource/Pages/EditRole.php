@@ -23,8 +23,7 @@ class EditRole extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()
-                ->translateLabel(),
+            Actions\DeleteAction::make(),
         ];
     }
 

@@ -111,12 +111,10 @@ class RoleResource extends Resource
                     ->dateTimeTooltip(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->translateLabel(),
+                Tables\Actions\EditAction::make(),
 
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\DeleteAction::make()
-                        ->translateLabel(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
             ])
             ->defaultSort('updated_at', 'desc');
