@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\RoleData;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
-final readonly class EditRoleAction
+readonly class EditRoleAction
 {
     public function execute(RoleContract & Model $role, RoleData $roleData): RoleContract & Model
     {

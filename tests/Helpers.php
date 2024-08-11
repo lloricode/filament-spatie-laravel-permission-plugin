@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Database\Eloquent\Model;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Role;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\UserFactory;
-use Spatie\Permission\Commands\CreateRole;
 use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\PermissionRegistrar;
 
 use function Pest\Laravel\actingAs;
 
@@ -20,17 +18,14 @@ function loginAsSuperAdmin()
     return $user;
 }
 
-function createRole(string $name, ?string $guard = null): RoleContract
+function createRole(string $name, ?string $guard = null): RoleContract & Model
 {
-    Artisan::call(CreateRole::class, [
-        'name' => $name,
-        'guard' => $guard ?? config('filament-permission.guard'),
-    ]);
 
-    return registrarRole()::findByName($name);
-}
+    /** @var RoleContract&Model $role */
+    $role = app(RoleContract::class)->findOrCreate(
+        name: $name,
+        guardName: $guard ?? config('filament-permission.guard'),
+    );
 
-function registrarRole(): RoleContract
-{
-    return app(app(PermissionRegistrar::class)->getRoleClass());
+    return $role;
 }

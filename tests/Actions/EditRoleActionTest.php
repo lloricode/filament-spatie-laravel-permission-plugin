@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Actions\EditRoleAction;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\RoleData;
 use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\Contracts\Role as RoleContract;
 
 use function PHPUnit\Framework\assertTrue;
 
@@ -19,7 +20,7 @@ it('can not edit defaults', function () {
     ));
 
     /** @var array<int, Role&Model> $roles */
-    $roles = registrarRole()::whereIn('name', $roleNames)->get();
+    $roles = app(RoleContract::class)::whereIn('name', $roleNames)->get();
 
     $action = app(EditRoleAction::class);
 

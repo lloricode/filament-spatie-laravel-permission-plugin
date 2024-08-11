@@ -7,8 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Permission;
-use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\Contracts\Permission as PermissionContract;
 
 abstract class BasePermissionSeeder extends Seeder
 {
@@ -16,8 +15,7 @@ abstract class BasePermissionSeeder extends Seeder
 
     public function run(): void
     {
-        /** @var Permission $permissionClass */
-        $permissionClass = app(PermissionRegistrar::class)->getPermissionClass();
+        $permissionClass = app(PermissionContract::class);
 
         collect($this->permissionsByGuard())
             ->map(fn (array $permissions) => collect($permissions))
