@@ -9,9 +9,9 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Support\Str;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Role;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Support\PermissionData;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
+use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\PermissionRegistrar;
 
 final class PermissionSchema
@@ -38,7 +38,7 @@ final class PermissionSchema
         return [
 
             Forms\Components\Hidden::make('permissions')
-                ->afterStateHydrated(function (Forms\Components\Hidden $component, ?Role $record): void {
+                ->afterStateHydrated(function (Forms\Components\Hidden $component, ?RoleContract $record): void {
                     $component->state($record ? $record->permissions->pluck('name') : []);
                 })
                 ->dehydrateStateUsing(
@@ -72,7 +72,7 @@ final class PermissionSchema
                 ->afterStateUpdated(function (Get $get, Set $set, bool $state): void {
                     self::updatedToggleSelectAllState(get: $get, set: $set, state: $state);
                 })
-                ->afterStateHydrated(function (Forms\Components\Toggle $component, ?Role $record): void {
+                ->afterStateHydrated(function (Forms\Components\Toggle $component, ?RoleContract $record): void {
 
                     if ($record === null) {
                         $component->state(false);
@@ -84,7 +84,7 @@ final class PermissionSchema
 
                     foreach (self::permissions() as $permissionData) {
 
-                        if (! $record->hasPermissionTo($permissionData->name)) {
+                        if (! $record->hasPermissionTo($permissionData->name, self::$guardName)) {
                             $all = false;
 
                             break;
@@ -109,7 +109,7 @@ final class PermissionSchema
                                         ->offIcon('heroicon-s-lock-closed')
                                         ->reactive()
                                         ->afterStateHydrated(
-                                            function (Forms\Components\Toggle $component, ?Role $record) use (
+                                            function (Forms\Components\Toggle $component, ?RoleContract $record) use (
                                                 $parentPermission
                                             ): void {
                                                 if ($record === null) {
@@ -117,7 +117,7 @@ final class PermissionSchema
 
                                                     return;
                                                 }
-                                                $component->state($record->hasPermissionTo($parentPermission));
+                                                $component->state($record->hasPermissionTo($parentPermission, self::$guardName));
                                             }
                                         )
                                         ->afterStateUpdated(
@@ -152,7 +152,7 @@ final class PermissionSchema
                                                 ->columns(2)
                                                 ->reactive()
                                                 ->afterStateHydrated(
-                                                    function (Forms\Components\CheckboxList $component, ?Role $record) use (
+                                                    function (Forms\Components\CheckboxList $component, ?RoleContract $record) use (
                                                         $permissionsDatas,
                                                         $parentPermission
                                                     ): void {
@@ -163,7 +163,7 @@ final class PermissionSchema
                                                             return;
                                                         }
 
-                                                        if ($record->hasPermissionTo($parentPermission)) {
+                                                        if ($record->hasPermissionTo($parentPermission, self::$guardName)) {
                                                             $component->state($permissionsDatas->pluck('name')->toArray());
 
                                                             return;
@@ -173,7 +173,7 @@ final class PermissionSchema
 
                                                         foreach ($permissionsDatas as $permissionData) {
 
-                                                            if ($record->hasPermissionTo($permissionData->name)) {
+                                                            if ($record->hasPermissionTo($permissionData->name, self::$guardName)) {
                                                                 $names[] = $permissionData->name;
                                                             }
                                                         }
