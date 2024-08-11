@@ -53,7 +53,8 @@ abstract class BasePermissionSeeder extends Seeder
                         count($allPermissionNames)
                     ));
 
-                    $permissionClass::whereGuardName($guardName)
+                    $this->permissionContract
+                        ->where('guard_name', $guardName)
                         ->whereNotIn('name', $allPermissionNames)
                         ->delete();
 
