@@ -66,7 +66,7 @@ abstract class BasePermissionSeeder extends Seeder
     /**
      * @param  array<int, string>  $permissions
      */
-    private function tablePagesPanelWidgets(string $type, array $permissions): void
+    protected function tablePagesPanelWidgets(string $type, array $permissions): void
     {
         $output = $this->command->getOutput();
 
@@ -81,7 +81,7 @@ abstract class BasePermissionSeeder extends Seeder
     /**
      * @param  array<int, ResourceSeeder>  $resourceSeeders
      */
-    private function tableResources(array $resourceSeeders): void
+    protected function tableResources(array $resourceSeeders): void
     {
         $output = $this->command->getOutput();
 
@@ -132,7 +132,7 @@ abstract class BasePermissionSeeder extends Seeder
     /**
      * @param  array<int, string>  $permissionNames
      */
-    public function seedPanelsPagesWidgets(array $permissionNames, string $guardName): void
+    protected function seedPanelsPagesWidgets(array $permissionNames, string $guardName): void
     {
         $permissionClass = app(PermissionContract::class);
 
@@ -154,7 +154,7 @@ abstract class BasePermissionSeeder extends Seeder
     /**
      * @param  array<int, ResourceSeeder>  $resourcePermissionNames
      */
-    public function seedResource(array $resourcePermissionNames, string $guardName): void
+    protected function seedResource(array $resourcePermissionNames, string $guardName): void
     {
         $permissionClass = app(PermissionContract::class);
 
