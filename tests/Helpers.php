@@ -20,7 +20,6 @@ function loginAsSuperAdmin()
 
 function createRole(string $name, ?string $guard = null): RoleContract & Model
 {
-
     /** @var RoleContract&Model $role */
     $role = app(RoleContract::class)->findOrCreate(
         name: $name,
