@@ -27,7 +27,7 @@ abstract class BasePermissionSeeder extends Seeder
 
                     $output->progressStart($permissions->count());
 
-                    $permissions->each(
+                    $permissions->sort()->each(
                         function (string $permission) use ($permissionClass, $guardName, $output) {
                             $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
                             $output->progressAdvance();
