@@ -48,14 +48,54 @@ abstract class BasePermissionSeeder extends Seeder
                         count($allPermissionNames)
                     ));
 
-                    $output->newLine();
-
                     $permissionClass::whereGuardName($guardName)
                         ->whereNotIn('name', $allPermissionNames)
                         ->delete();
+
+                    $this->tablePagesPanelWidgets('panels', $permissionSeeder->panels);
+                    $this->tablePagesPanelWidgets('pages', $permissionSeeder->pages);
+                    $this->tablePagesPanelWidgets('widgets', $permissionSeeder->widgets);
+                    $this->tableResources($permissionSeeder->resources);
+
+                    $output->newLine();
                 }
             );
 
+    }
+
+    /**
+     * @param  array<int, string>  $permissions
+     */
+    private function tablePagesPanelWidgets(string $type, array $permissions): void
+    {
+        $output = $this->command->getOutput();
+
+        $rows = [];
+        foreach ($permissions as $permissionName) {
+            $rows[] = [$permissionName];
+        }
+        $output->table([$type], $rows);
+
+    }
+
+    /**
+     * @param  array<int, ResourceSeeder>  $resourceSeeders
+     */
+    private function tableResources(array $resourceSeeders): void
+    {
+        $output = $this->command->getOutput();
+
+        $rows = [];
+        foreach ($resourceSeeders as $resourceSeeder) {
+            $rows[] = [
+                Str::of($resourceSeeder->resource)->classBasename(),
+                Str::of($resourceSeeder->model)->classBasename(),
+                Str::of($resourceSeeder->modelPolicy)->classBasename(),
+                implode(PHP_EOL, $resourceSeeder->permissionNames),
+            ];
+        }
+
+        $output->table(['resource', 'model', 'modelPolicy', 'permissionNames'], $rows);
     }
 
     /** @param  class-string  $modelPolicy */
