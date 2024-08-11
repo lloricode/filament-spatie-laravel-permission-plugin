@@ -42,8 +42,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\": "src/",
-            "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\Database\\Factories\\": "database/factories/"
+            "Lloricode\\FilamentSpatieLaravelPermissionPlugin\\": "src/"
         }
     },
     "autoload-dev": {
