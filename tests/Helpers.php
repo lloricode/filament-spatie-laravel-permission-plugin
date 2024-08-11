@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Model;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Models\Role;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\UserFactory;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
@@ -12,10 +11,21 @@ use function Pest\Laravel\actingAs;
 function loginAsSuperAdmin()
 {
     $user = UserFactory::new()->createOne(['email' => 'test@test.com']);
-    $user->assignRole(Role::superAdmin());
+    $user->assignRole(getSuperAdminRole());
     actingAs($user);
 
     return $user;
+}
+
+// get user admin role
+function getSuperAdminRole(): RoleContract & Model
+{
+    /** @var RoleContract&Model $role */
+    $role = app(RoleContract::class)->findByName(
+        name: config('filament-permission.roles.super_admin'),
+    );
+
+    return $role;
 }
 
 function createRole(string $name, ?string $guard = null): RoleContract & Model
