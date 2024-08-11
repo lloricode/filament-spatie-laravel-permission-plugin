@@ -20,23 +20,26 @@ abstract class BasePermissionSeeder extends Seeder
         collect($this->permissionsByGuard())
             ->map(fn (array $permissions) => collect($permissions))
             ->each(
-                function (Collection $permissions, string $guard) use ($permissionClass) {
-                    $this->command->getOutput()->info('Seeding permissions for guard: ' . $guard . ' ...');
-                    $progressBar = $this->command->getOutput()->createProgressBar($permissions->count());
-                    $progressBar->start();
+                function (Collection $permissions, string $guardName) use ($permissionClass) {
+                    $output = $this->command->getOutput();
+
+                    $output->info('Seeding permissions for guard: ' . $guardName . ' ...');
+
+                    $output->progressStart($permissions->count());
 
                     $permissions->each(
-                        function (string $permission) use ($permissionClass, $guard, $progressBar) {
-                            $permissionClass::findOrCreate(name: $permission, guardName: $guard);
-                            $progressBar->advance();
+                        function (string $permission) use ($permissionClass, $guardName, $output) {
+                            $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
+                            $output->progressAdvance();
                         }
                     );
 
-                    $progressBar->finish();
-                    $this->command->getOutput()->info('Done Seeding permissions for guard: ' . $guard . '!');
-                    $this->command->getOutput()->newLine();
+                    $output->progressFinish();
 
-                    $permissionClass::whereGuardName($guard)
+                    $output->info('Done Seeding permissions for guard: ' . $guardName . '!');
+                    $output->newLine();
+
+                    $permissionClass::whereGuardName($guardName)
                         ->whereNotIn('name', $permissions)
                         ->delete();
                 }
