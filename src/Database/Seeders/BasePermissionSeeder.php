@@ -9,9 +9,15 @@ use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
+use Spatie\Permission\Contracts\Role as RoleContract;
 
 abstract class BasePermissionSeeder extends Seeder
 {
+    public function __construct(
+        protected readonly RoleContract $roleContract,
+        protected readonly PermissionContract $permissionContract,
+    ) {}
+
     /**
      * @return array<string, PermissionSeeder>
      */
@@ -19,11 +25,10 @@ abstract class BasePermissionSeeder extends Seeder
 
     public function run(): void
     {
-        $permissionClass = app(PermissionContract::class);
 
         collect($this->permissionsByGuard())
             ->each(
-                function (PermissionSeeder $permissionSeeder, string $guardName) use ($permissionClass) {
+                function (PermissionSeeder $permissionSeeder, string $guardName) {
                     $output = $this->command->getOutput();
 
                     $output->title(sprintf('Seeding permissions for guard: [%s] ...', $guardName));
@@ -134,7 +139,6 @@ abstract class BasePermissionSeeder extends Seeder
      */
     protected function seedPanelsPagesWidgets(array $permissionNames, string $guardName): void
     {
-        $permissionClass = app(PermissionContract::class);
 
         $permissionNames = collect($permissionNames);
 
@@ -142,8 +146,8 @@ abstract class BasePermissionSeeder extends Seeder
         $output->progressStart($permissionNames->count());
 
         $permissionNames->sort()->each(
-            function (string $permission) use ($permissionClass, $guardName, $output) {
-                $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
+            function (string $permission) use ($guardName, $output) {
+                $this->permissionContract->findOrCreate(name: $permission, guardName: $guardName);
                 $output->progressAdvance();
             }
         );
@@ -156,7 +160,6 @@ abstract class BasePermissionSeeder extends Seeder
      */
     protected function seedResource(array $resourcePermissionNames, string $guardName): void
     {
-        $permissionClass = app(PermissionContract::class);
 
         $permissionNames = collect();
 
@@ -168,8 +171,8 @@ abstract class BasePermissionSeeder extends Seeder
         $output->progressStart($permissionNames->count());
 
         $permissionNames->sort()->each(
-            function (string $permission) use ($permissionClass, $guardName, $output) {
-                $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
+            function (string $permission) use ($guardName, $output) {
+                $this->permissionContract->findOrCreate(name: $permission, guardName: $guardName);
                 $output->progressAdvance();
             }
         );
