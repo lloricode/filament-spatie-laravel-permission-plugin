@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
 
 abstract class BasePermissionSeeder extends Seeder
 {
+    /**
+     * @return array<string, PermissionSeeder>
+     */
     abstract protected function permissionsByGuard(): array;
 
     public function run(): void
@@ -18,32 +22,40 @@ abstract class BasePermissionSeeder extends Seeder
         $permissionClass = app(PermissionContract::class);
 
         collect($this->permissionsByGuard())
-            ->map(fn (array $permissions) => collect($permissions))
             ->each(
-                function (Collection $permissions, string $guardName) use ($permissionClass) {
+                function (PermissionSeeder $permissionSeeder, string $guardName) use ($permissionClass) {
                     $output = $this->command->getOutput();
 
-                    $output->info('Seeding permissions for guard: ' . $guardName . ' ...');
+                    $output->title(sprintf('Seeding permissions for guard: [%s] ...', $guardName));
 
-                    $output->progressStart($permissions->count());
+                    $output->text('panels');
+                    $this->seedPanelsPagesWidgets($permissionSeeder->panels, $guardName);
 
-                    $permissions->sort()->each(
-                        function (string $permission) use ($permissionClass, $guardName, $output) {
-                            $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
-                            $output->progressAdvance();
-                        }
-                    );
+                    $output->text('pages');
+                    $this->seedPanelsPagesWidgets($permissionSeeder->pages, $guardName);
 
-                    $output->progressFinish();
+                    $output->text('widgets');
+                    $this->seedPanelsPagesWidgets($permissionSeeder->widgets, $guardName);
 
-                    $output->info('Done Seeding permissions for guard: ' . $guardName . '!');
+                    $output->text('resources');
+                    $this->seedResource($permissionSeeder->resources, $guardName);
+
+                    $allPermissionNames = $permissionSeeder->allPermissionNames();
+
+                    $output->info(sprintf(
+                        'Done Seeding permissions for guard: [%s] with total of [%d] permissions.!',
+                        $guardName,
+                        count($allPermissionNames)
+                    ));
+
                     $output->newLine();
 
                     $permissionClass::whereGuardName($guardName)
-                        ->whereNotIn('name', $permissions)
+                        ->whereNotIn('name', $allPermissionNames)
                         ->delete();
                 }
             );
+
     }
 
     /** @param  class-string  $modelPolicy */
@@ -73,6 +85,55 @@ abstract class BasePermissionSeeder extends Seeder
         return collect($permissions)
             ->map(fn (string $permission) => "{$resourceName}.{$permission}")
             ->prepend($resourceName)
+            ->sort()
             ->toArray();
+    }
+
+    /**
+     * @param  array<int, string>  $permissionNames
+     */
+    public function seedPanelsPagesWidgets(array $permissionNames, string $guardName): void
+    {
+        $permissionClass = app(PermissionContract::class);
+
+        $permissionNames = collect($permissionNames);
+
+        $output = $this->command->getOutput();
+        $output->progressStart($permissionNames->count());
+
+        $permissionNames->sort()->each(
+            function (string $permission) use ($permissionClass, $guardName, $output) {
+                $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
+                $output->progressAdvance();
+            }
+        );
+
+        $output->progressFinish();
+    }
+
+    /**
+     * @param  array<int, ResourceSeeder>  $resourcePermissionNames
+     */
+    public function seedResource(array $resourcePermissionNames, string $guardName): void
+    {
+        $permissionClass = app(PermissionContract::class);
+
+        $permissionNames = collect();
+
+        foreach ($resourcePermissionNames as $resourcePermissionName) {
+            $permissionNames = $permissionNames->merge($resourcePermissionName->permissionNames);
+        }
+
+        $output = $this->command->getOutput();
+        $output->progressStart($permissionNames->count());
+
+        $permissionNames->sort()->each(
+            function (string $permission) use ($permissionClass, $guardName, $output) {
+                $permissionClass->findOrCreate(name: $permission, guardName: $guardName);
+                $output->progressAdvance();
+            }
+        );
+
+        $output->progressFinish();
     }
 }

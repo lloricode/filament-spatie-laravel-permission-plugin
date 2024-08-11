@@ -7,39 +7,47 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 use Exception;
 use Filament\Facades\Filament;
 use Filament\Panel;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionGenerateName;
 
 class DefaultPermissionSeeder extends BasePermissionSeeder
 {
-    /** @throws Exception */
+    /**
+     * {@inheritdoc}
+     *
+     * @throws Exception
+     */
     #[\Override]
     protected function permissionsByGuard(): array
     {
         return [
-            Config::string('filament-permission.guard') => self::getPermissionsFromPanels()
-                ->merge(self::getPermissionsFromResourceModelPolicies())
-                ->merge(self::getPermissionsFromWidgets())
-                ->merge(self::getPermissionsFromPages())
-                ->toArray(),
+            Config::string('filament-permission.guard') => new PermissionSeeder(
+                panels: self::getPermissionsFromPanels(),
+                pages: self::getPermissionsFromPages(),
+                widgets: self::getPermissionsFromWidgets(),
+                resources: self::getPermissionsFromResourceModelPolicies()
+            ),
         ];
     }
 
-    /** @return \Illuminate\Support\Collection<int, string> */
-    private static function getPermissionsFromPanels(): Collection
+    /** @return array<int, string> */
+    private static function getPermissionsFromPanels(): array
     {
         return collect(Filament::getPanels())
             ->map(fn (Panel $panel) => FilamentPermissionGenerateName::getPanelPermissionName($panel))
             ->prepend(FilamentPermissionGenerateName::PANELS)
-            ->values();
+            ->values()
+            ->sort()
+            ->toArray();
     }
 
-    /** @return \Illuminate\Support\Collection<int, string> */
-    private static function getPermissionsFromResourceModelPolicies(): Collection
+    /** @return array<int, ResourceSeeder> */
+    private static function getPermissionsFromResourceModelPolicies(): array
     {
         $permissionsByPolicy = collect();
 
@@ -47,16 +55,20 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
             $modelPolicy = Gate::getPolicyFor($filamentResource::getModel());
 
-            $permissionsByPolicy = $permissionsByPolicy->merge(
-                self::generateFilamentResourcePermissions($modelPolicy::class)
-            );
+            $permissionsByPolicy->push(new ResourceSeeder(
+                resource: $filamentResource,
+                model: $filamentResource::getModel(),
+                modelPolicy: $modelPolicy::class,
+                permissionNames: self::generateFilamentResourcePermissions($modelPolicy::class)
+            ));
+
         }
 
-        return $permissionsByPolicy;
+        return $permissionsByPolicy->sort()->toArray();
     }
 
-    /** @return \Illuminate\Support\Collection<int, string> */
-    private static function getPermissionsFromWidgets(): Collection
+    /** @return array<int, string> */
+    private static function getPermissionsFromWidgets(): array
     {
         $permissionNames = collect();
 
@@ -67,16 +79,16 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         }
 
         if ($permissionNames->isEmpty()) {
-            return $permissionNames;
+            return [];
         }
 
         $permissionNames->prepend(FilamentPermissionGenerateName::WIDGETS);
 
-        return $permissionNames;
+        return $permissionNames->sort()->toArray();
     }
 
-    /** @return \Illuminate\Support\Collection<int, string> */
-    private static function getPermissionsFromPages(): Collection
+    /** @return array<int, string> */
+    private static function getPermissionsFromPages(): array
     {
         $permissionNames = collect();
 
@@ -87,11 +99,11 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         }
 
         if ($permissionNames->isEmpty()) {
-            return $permissionNames;
+            return [];
         }
 
         $permissionNames->prepend(FilamentPermissionGenerateName::PAGES);
 
-        return $permissionNames;
+        return $permissionNames->sort()->toArray();
     }
 }
