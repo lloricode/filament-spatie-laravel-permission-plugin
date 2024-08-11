@@ -27,16 +27,16 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     {
         return [
             Config::string('filament-permission.guard') => new PermissionSeeder(
-                panels: self::getPermissionsFromPanels(),
-                pages: self::getPermissionsFromPages(),
-                widgets: self::getPermissionsFromWidgets(),
-                resources: self::getPermissionsFromResourceModelPolicies()
+                panels: $this->getPermissionsFromPanels(),
+                pages: $this->getPermissionsFromPages(),
+                widgets: $this->getPermissionsFromWidgets(),
+                resources: $this->getPermissionsFromResourceModelPolicies()
             ),
         ];
     }
 
     /** @return array<int, string> */
-    private static function getPermissionsFromPanels(): array
+    protected function getPermissionsFromPanels(): array
     {
         return collect(Filament::getPanels())
             ->map(fn (Panel $panel) => FilamentPermissionGenerateName::getPanelPermissionName($panel))
@@ -47,13 +47,24 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     }
 
     /** @return array<int, ResourceSeeder> */
-    private static function getPermissionsFromResourceModelPolicies(): array
+    protected function getPermissionsFromResourceModelPolicies(): array
     {
         $permissionsByPolicy = collect();
 
         foreach (Filament::getResources() as $filamentResource) {
 
             $modelPolicy = Gate::getPolicyFor($filamentResource::getModel());
+
+            if ($modelPolicy === null) {
+                $output = $this->command->getOutput();
+                $output->warning(sprintf(
+                    'Resource [%s] does not have a policy for model [%s].',
+                    $filamentResource,
+                    $filamentResource::getModel()
+                ));
+
+                continue;
+            }
 
             $permissionsByPolicy->push(new ResourceSeeder(
                 resource: $filamentResource,
@@ -68,7 +79,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     }
 
     /** @return array<int, string> */
-    private static function getPermissionsFromWidgets(): array
+    protected function getPermissionsFromWidgets(): array
     {
         $permissionNames = collect();
 
