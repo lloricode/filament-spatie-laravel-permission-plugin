@@ -248,7 +248,9 @@ final class PermissionSchema
 
                 $ability = $permissionData->child_name ?? throw new \ErrorException('This should not happen');
 
-                $ability = Str::ucfirst($ability);
+                $ability = Str::of($ability)
+                    ->snake(' ')
+                    ->ucfirst();
 
                 if (Config::boolean('filament-permission.translated', false)) {
                     $ability = trans($ability);
