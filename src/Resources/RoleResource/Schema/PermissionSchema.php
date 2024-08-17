@@ -8,6 +8,7 @@ use Filament\Forms;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Collection as CollectionSupport;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Support\PermissionData;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
@@ -105,6 +106,7 @@ final class PermissionSchema
                                 ->schema([
 
                                     Forms\Components\Toggle::make($parentPermission)
+                                        ->translateLabel(Config::boolean('filament-permission.translated', false))
                                         ->onIcon('heroicon-s-lock-open')
                                         ->offIcon('heroicon-s-lock-closed')
                                         ->reactive()
@@ -242,11 +244,20 @@ final class PermissionSchema
     private static function parentAbilitiesLabeled(CollectionSupport $permissionsDatas): CollectionSupport
     {
         return $permissionsDatas
-            ->mapWithKeys(fn (PermissionData $permissionData) => [
-                $permissionData->name => Str::headline(
-                    $permissionData->child_name ?? throw new \ErrorException('This should not happen')
-                ),
-            ]);
+            ->mapWithKeys(function (PermissionData $permissionData) {
+
+                $ability = $permissionData->child_name ?? throw new \ErrorException('This should not happen');
+
+                $ability = Str::headline($ability);
+
+                if (Config::boolean('filament-permission.translated', false)) {
+                    $ability = trans($ability);
+                }
+
+                return [
+                    $permissionData->name => $ability,
+                ];
+            });
     }
 
     /** @param  CollectionSupport<int, PermissionData>  $permissionDatas */
