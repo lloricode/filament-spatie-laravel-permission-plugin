@@ -248,7 +248,7 @@ final class PermissionSchema
 
                 $ability = $permissionData->child_name ?? throw new \ErrorException('This should not happen');
 
-                $ability = Str::of($ability)
+                $ability = (string) Str::of($ability)
                     ->snake(' ')
                     ->ucfirst();
 
