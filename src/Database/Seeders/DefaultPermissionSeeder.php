@@ -26,7 +26,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     protected function permissionsByGuard(): array
     {
         return [
-            PermissionConfig::getDefaultGuardName() => new PermissionSeeder(
+            PermissionConfig::defaultGuardName() => new PermissionSeeder(
                 panels: $this->getPermissionsFromPanels(),
                 pages: $this->getPermissionsFromPages(),
                 widgets: $this->getPermissionsFromWidgets(),

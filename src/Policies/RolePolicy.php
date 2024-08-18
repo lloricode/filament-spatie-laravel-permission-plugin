@@ -36,11 +36,20 @@ class RolePolicy
 
     public function update(User $user, RoleContract $role): bool
     {
-        return $this->checkWildcardPermissions($user);
+        return $this->canModify($user, $role);
     }
 
     public function delete(User $user, RoleContract $role): bool
     {
+        return $this->canModify($user, $role);
+    }
+
+    private function canModify(User $user, RoleContract $role): bool
+    {
+        if (in_array($role->name, PermissionConfig::allRoleNames($role->guard_name), true)) {
+            return false;
+        }
+
         return $this->checkWildcardPermissions($user);
     }
 }

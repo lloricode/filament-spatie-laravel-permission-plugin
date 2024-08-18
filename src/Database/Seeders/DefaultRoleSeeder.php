@@ -21,7 +21,7 @@ class DefaultRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (PermissionConfig::allRoleNamesByGuardName() as $guardName => $roleNames) {
+        foreach (PermissionConfig::allRoleNamesGroupByGuardName() as $guardName => $roleNames) {
 
             foreach ($roleNames as $roleName) {
                 $role = $this->roleContract->findOrCreate(

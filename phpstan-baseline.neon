@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Foundation\\\\Auth\\\\User\\:\\:isAdminOrSuperAdmin\\(\\)\\.$#"
+			count: 1
+			path: src/Policies/RolePolicy.php
+
+		-
 			message: "#^Method Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Schema\\\\PermissionSchema\\:\\:permissionGroupByParent\\(\\) should return Illuminate\\\\Support\\\\Collection\\<string, Illuminate\\\\Support\\\\Collection\\<int, Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Support\\\\PermissionData\\>\\> but returns Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Support\\\\PermissionData\\>\\>\\.$#"
 			count: 1
 			path: src/Resources/RoleResource/Schema/PermissionSchema.php
