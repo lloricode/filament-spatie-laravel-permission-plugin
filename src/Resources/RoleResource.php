@@ -111,6 +111,7 @@ class RoleResource extends Resource
                     ->dateTimeTooltip(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
 
                 Tables\Actions\ActionGroup::make([
@@ -126,6 +127,7 @@ class RoleResource extends Resource
         return [
             'index' => RoleResource\Pages\ListRoles::route('/'),
             'create' => RoleResource\Pages\CreateRole::route('/create'),
+            'view' => RoleResource\Pages\ViewRole::route('/{record}'),
             'edit' => RoleResource\Pages\EditRole::route('/{record}/edit'),
         ];
     }

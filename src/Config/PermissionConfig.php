@@ -92,7 +92,7 @@ final class PermissionConfig
     }
 
     /**
-     * @return array<string, array<string, string>>
+     * @return array<int, string>
      */
     public static function roleNamesByGuardName(?string $guardName = null): array
     {
@@ -105,7 +105,7 @@ final class PermissionConfig
     }
 
     /**
-     * @return array<string, array<string, string>>
+     * @return array<int, string>
      */
     public static function extraRoleNamesByGuardName(?string $guardName = null): array
     {

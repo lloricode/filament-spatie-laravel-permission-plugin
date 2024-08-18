@@ -12,20 +12,21 @@ class RolePolicy
 {
     use ChecksWildcardPermissions;
 
-    public function before(?User $user, string $ability, mixed $role = null): ?bool
-    {
-        if ($role instanceof RoleContract) {
-
-            if (in_array($role->name, PermissionConfig::allRoleNames($role->guard_name), true)) {
-                return false;
-            }
-        }
-
-        return null;
-    }
-
     public function viewAny(User $user): bool
     {
+        return $this->checkWildcardPermissions($user);
+    }
+
+    public function view(User $user, RoleContract $role): bool
+    {
+        if (in_array($role->name, PermissionConfig::extraRoleNamesByGuardName($role->guard_name), true)) {
+            return true;
+        }
+
+        if (in_array($role->name, PermissionConfig::roleNamesByGuardName($role->guard_name), true)) {
+            return false;
+        }
+
         return $this->checkWildcardPermissions($user);
     }
 
