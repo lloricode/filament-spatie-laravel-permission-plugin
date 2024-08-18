@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Config;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config as ConfigFacade;
 
 final class PermissionConfig
@@ -73,11 +72,12 @@ final class PermissionConfig
      */
     public static function allRoleNames(?string $guardName = null): array
     {
+        $data = collect(self::allRoleNamesGroupByGuardName());
         if ($guardName === null) {
-            return array_values(array_unique(Arr::flatten(self::allRoleNamesGroupByGuardName())));
+            return $data->flatten()->unique()->values()->toArray();
         }
 
-        return array_values(Arr::get(self::allRoleNamesGroupByGuardName(), $guardName));
+        return collect($data->get($guardName))->flatten()->unique()->values()->toArray();
     }
 
     public static function allGuardNames(): array
@@ -96,12 +96,14 @@ final class PermissionConfig
      */
     public static function roleNamesByGuardName(?string $guardName = null): array
     {
+        $data = collect(self::roleNames());
 
         if ($guardName === null) {
-            return array_values(array_unique(Arr::flatten(self::roleNames())));
+            return $data->flatten()->unique()->values()->toArray();
         }
 
-        return array_values(Arr::get(self::roleNames(), $guardName));
+        return collect($data->get($guardName))->flatten()->unique()->values()->toArray();
+
     }
 
     /**
@@ -109,11 +111,13 @@ final class PermissionConfig
      */
     public static function extraRoleNamesByGuardName(?string $guardName = null): array
     {
+        $data = collect(self::extraRoleNames());
+
         if ($guardName === null) {
-            return array_values(array_unique(Arr::flatten(self::extraRoleNames())));
+            return $data->flatten()->unique()->values()->toArray();
         }
 
-        return array_values(Arr::get(self::extraRoleNames(), $guardName));
+        return collect($data->get($guardName))->flatten()->unique()->values()->toArray();
     }
 
     public static function checkNoSameRoleNameOnExtra(): void
