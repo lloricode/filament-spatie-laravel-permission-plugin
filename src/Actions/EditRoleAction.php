@@ -13,16 +13,30 @@ readonly class EditRoleAction
 {
     public function execute(RoleContract & Model $role, RoleData $roleData): RoleContract & Model
     {
-        $roleNames = PermissionConfig::allRoleNames($roleData->guard_name);
+        $roleNames = PermissionConfig::roleNamesByGuardName($roleData->guard_name);
 
         if (in_array($role->name, $roleNames, true)) {
             abort(400, trans('Cannot update this role.'));
         }
 
-        $role->update([
-            'name' => $roleData->name,
-            'guard_name' => $roleData->guard_name,
-        ]);
+        $roleNames = PermissionConfig::extraRoleNamesByGuardName($roleData->guard_name);
+
+        $isExtraRole = in_array($role->name, $roleNames, true);
+
+        if ($role->name !== $roleData->name) {
+
+            if ($isExtraRole) {
+                abort(400, trans('Cannot update this role.'));
+            }
+
+        }
+
+        if (! $isExtraRole) {
+            $role->update([
+                'name' => $roleData->name,
+                'guard_name' => $roleData->guard_name,
+            ]);
+        }
 
         $role->syncPermissions($roleData->permissions);
 

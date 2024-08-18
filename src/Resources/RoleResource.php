@@ -12,7 +12,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Schema\PermissionSchema;
+use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\PermissionRegistrar;
 
 class RoleResource extends Resource
@@ -41,6 +43,19 @@ class RoleResource extends Resource
     {
         $guards = collect([config('auth.defaults.guard')]);
 
+        $readOnly = function (?RoleContract $record): bool {
+
+            if ($record === null) {
+                return false;
+            }
+
+            return in_array(
+                $record->name,
+                PermissionConfig::extraRoleNamesByGuardName($record->guard_name),
+                true
+            );
+        };
+
         return $form
             ->schema([
                 Forms\Components\Section::make()
@@ -52,11 +67,13 @@ class RoleResource extends Resource
                                     ->required()
                                     ->string()
                                     ->maxLength(50)
-                                    ->unique(ignoreRecord: true),
+                                    ->unique(ignoreRecord: true)
+                                    ->readOnly($readOnly),
 
                                 Forms\Components\Select::make('guard_name')
                                     ->translateLabel()
                                     ->required()
+                                    ->disabled($readOnly)
                                     ->in($guards)
                                     ->options(
                                         $guards
