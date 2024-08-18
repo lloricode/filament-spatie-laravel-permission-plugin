@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\RoleData;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
@@ -13,12 +13,9 @@ readonly class EditRoleAction
 {
     public function execute(RoleContract & Model $role, RoleData $roleData): RoleContract & Model
     {
-        $roles = array_merge(
-            Config::array('filament-permission.roles'),
-            Config::array('filament-permission.extra_roles')
-        );
+        $roleNames = PermissionConfig::allRoleNames($roleData->guard_name);
 
-        if (in_array($role->name, $roles, true)) {
+        if (in_array($role->name, $roleNames, true)) {
             abort(400, trans('Cannot update this role.'));
         }
 

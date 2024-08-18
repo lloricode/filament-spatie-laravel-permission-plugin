@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Policies;
 
 use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Config;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
 class RolePolicy
@@ -16,11 +16,7 @@ class RolePolicy
     {
         if ($role instanceof RoleContract) {
 
-            if (in_array($role->name, Config::array('filament-permission.roles'), true)) {
-                return false;
-            }
-
-            if (in_array($role->name, Config::array('filament-permission.extra_roles'), true)) {
+            if (in_array($role->name, PermissionConfig::allRoleNames($role->guard_name), true)) {
                 return false;
             }
         }

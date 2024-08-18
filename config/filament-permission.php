@@ -3,13 +3,16 @@
 declare(strict_types=1);
 
 return [
-    'guard' => 'web',
-    'roles' => [
-        'super_admin' => 'super_admin',
-        'admin' => 'admin',
+    'role_names' => [
+        'web' => [
+            'super_admin' => 'super_admin',
+            'admin' => 'admin',
+        ],
     ],
-    'extra_roles' => [
-
+    'extra_role_names' => [
+        // 'web' => [
+        //    'user' => 'user',
+        // ],
     ],
 
     'seeders' => [

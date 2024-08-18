@@ -7,8 +7,8 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 use Exception;
 use Filament\Facades\Filament;
 use Filament\Panel;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
@@ -26,7 +26,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     protected function permissionsByGuard(): array
     {
         return [
-            Config::string('filament-permission.guard') => new PermissionSeeder(
+            PermissionConfig::getDefaultGuardName() => new PermissionSeeder(
                 panels: $this->getPermissionsFromPanels(),
                 pages: $this->getPermissionsFromPages(),
                 widgets: $this->getPermissionsFromWidgets(),

@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern;
 
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
+
 trait PermissionUser
 {
-    public function isAdminOrSuperAdmin(): bool
+    public function isAdminOrSuperAdmin(?string $guardName = null): bool
     {
         return $this->hasAnyRole(
-            config('filament-permission.roles.super_admin'),
-            config('filament-permission.roles.admin')
+            PermissionConfig::superAdmin($guardName),
+            PermissionConfig::admin($guardName),
         );
     }
 
-    public function isSuperAdmin(): bool
+    public function isSuperAdmin(?string $guardName = null): bool
     {
-        return $this->hasRole(config('filament-permission.roles.super_admin'));
+        return $this->hasRole(PermissionConfig::superAdmin($guardName));
     }
 }

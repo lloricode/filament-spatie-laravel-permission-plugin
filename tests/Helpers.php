@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Model;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\UserFactory;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
@@ -22,7 +23,7 @@ function getSuperAdminRole(): RoleContract & Model
 {
     /** @var RoleContract&Model $role */
     $role = app(RoleContract::class)->findByName(
-        name: config('filament-permission.roles.super_admin'),
+        name: PermissionConfig::superAdmin(),
     );
 
     return $role;
