@@ -14,15 +14,13 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class FilamentSpatieLaravelPermissionPluginServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'filament-spatie-laravel-permission';
-
     public function configurePackage(Package $package): void
     {
-        $package->name(static::$name)
+        $package->name('filament-permission')
             ->hasCommands([
                 PermissionSyncCommand::class,
             ])
-            ->hasConfigFile('filament-permission');
+            ->hasConfigFile();
     }
 
     public function packageRegistered(): void

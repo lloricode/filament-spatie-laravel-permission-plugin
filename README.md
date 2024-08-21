@@ -17,7 +17,7 @@ composer require lloricode/filament-spatie-laravel-permission-plugin
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="filament-spatie-laravel-permission-plugin-config"
+php artisan vendor:publish --tag="filament-permission-config"
 ```
 
 This is the contents of the published config file:
