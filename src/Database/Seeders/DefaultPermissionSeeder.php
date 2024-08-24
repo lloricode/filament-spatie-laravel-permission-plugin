@@ -9,7 +9,7 @@ use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
@@ -104,7 +104,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         $permissionNames = collect();
 
         foreach (Filament::getPages() as $page) {
-            if (app($page) instanceof HasPermissionPage && $page::canBeSeed()) {
+            if (app($page) instanceof HasPermissionPages && $page::canBeSeed()) {
                 $permissionNames->push(FilamentPermissionGenerateName::getPagePermissionName($page));
             }
         }

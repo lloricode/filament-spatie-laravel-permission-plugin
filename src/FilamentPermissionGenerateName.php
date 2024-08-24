@@ -7,7 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Support\Str;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
 
 final class FilamentPermissionGenerateName
@@ -40,10 +40,10 @@ final class FilamentPermissionGenerateName
         );
     }
 
-    /** @param  \Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage|class-string<\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPage>  $page */
-    public static function getPagePermissionName(HasPermissionPage | string $page): string
+    /** @param  \Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages|class-string<\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages>  $page */
+    public static function getPagePermissionName(HasPermissionPages | string $page): string
     {
-        if ($page instanceof HasPermissionPage) {
+        if ($page instanceof HasPermissionPages) {
             $page = $page::class;
         }
 

@@ -32,8 +32,23 @@ return [
         ],
     ],
 
+    /**
+     * You can use this seeder class to your own project level seeder.
+     * But this is also able to sync your adjusted permissions name by using the ready made artisan command
+     *
+     * `php artisan permission:sync`
+     */
     'seeders' => [
+
         'roles' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultRoleSeeder::class,
+
+        /**
+         * All permissions are generated base on your your setup.
+         *
+         * - public methods from Model policies class from your filament resources.
+         * - filament pages that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages`.
+         * - filament widgets that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets`.
+         */
         'permissions' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder::class,
     ],
 
