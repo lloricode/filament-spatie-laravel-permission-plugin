@@ -21,7 +21,7 @@ final class PermissionSchema
 
     public static function schema(?string $guardName): array
     {
-        if ($guardName === null) {
+        if (blank($guardName)) {
             return [
                 Forms\Components\Placeholder::make(trans('Select guard name first before selecting permissions')),
             ];

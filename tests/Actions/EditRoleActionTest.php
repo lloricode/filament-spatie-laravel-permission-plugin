@@ -16,14 +16,14 @@ use function PHPUnit\Framework\assertTrue;
 it('can not edit defaults', function () {
 
     /** @var array<int, Role&Model> $roles */
-    $roles = app(RoleContract::class)::whereIn('name', PermissionConfig::allRoleNames())->get();
+    $roles = app(RoleContract::class)::whereIn('name', PermissionConfig::roleNamesByGuardName())->get();
 
     $action = app(EditRoleAction::class);
 
     foreach ($roles as $role) {
 
         try {
-            $action->execute($role, new RoleData(name: fake()->word(), guard_name: null, permissions: []));
+            $action->execute($role, new RoleData(name: fake()->word(), permissions: [], guard_name: null));
 
             assertTrue(false);
         } catch (\Exception $e) {

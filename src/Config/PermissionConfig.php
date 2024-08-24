@@ -15,147 +15,43 @@ final class PermissionConfig
 
     public static function superAdmin(?string $guardName = null): string
     {
-        $guardName ??= self::defaultGuardName();
-
-        return ConfigFacade::string('filament-permission.role_names.' . $guardName . '.super_admin');
+        return self::roleName('super_admin', $guardName);
     }
 
     public static function admin(?string $guardName = null): string
     {
-        $guardName ??= self::defaultGuardName();
-
-        return ConfigFacade::string('filament-permission.role_names.' . $guardName . '.admin');
+        return self::roleName('admin', $guardName);
     }
 
-    public static function extraRole(string $roleName, ?string $guardName = null): string
+    public static function roleName(string $roleKey, ?string $guardName = null): string
     {
-        if (blank(self::extraRoleNames())) {
-            abort(500, 'No extra roles found in config/filament-permission.php');
-        }
-
         $guardName ??= self::defaultGuardName();
 
-        return ConfigFacade::string('filament-permission.extra_role_names.' . $guardName . '.' . $roleName);
+        return ConfigFacade::string('filament-permission.role_names.' . $guardName . '.' . $roleKey);
     }
 
     /**
      * @return array<string, array<string, string>>
      */
-    public static function roleNames(): array
+    public static function roleNamesGroupByGuardName(): array
     {
         return ConfigFacade::array('filament-permission.role_names');
     }
 
     /**
-     * @return array<string, array<string, string>>
-     */
-    public static function extraRoleNames(): array
-    {
-        return ConfigFacade::array('filament-permission.extra_role_names', []);
-    }
-
-    /**
-     * @return array<string, array<string, string>>
-     */
-    public static function allRoleNamesGroupByGuardName(): array
-    {
-        self::checkNoSameRoleNameOnExtra();
-
-        $roles = self::roleNames();
-        $extraRoles = self::extraRoleNames();
-
-        return array_merge_recursive($roles, $extraRoles);
-    }
-
-    /**
      * @return array<string, string>
-     */
-    public static function allRoleNames(?string $guardName = null): array
-    {
-        $data = collect(self::allRoleNamesGroupByGuardName());
-        if ($guardName === null) {
-            return $data->flatten()->unique()->values()->toArray();
-        }
-
-        return collect($data->get($guardName))->flatten()->unique()->values()->toArray();
-    }
-
-    public static function allGuardNames(): array
-    {
-        $extraRoles = self::extraRoleNames();
-        $roles = self::roleNames();
-
-        return collect($extraRoles)->keys()
-            ->merge(collect($roles)->keys())
-            ->unique()
-            ->toArray();
-    }
-
-    /**
-     * @return array<int, string>
      */
     public static function roleNamesByGuardName(?string $guardName = null): array
     {
-        $data = collect(self::roleNames());
-
-        if ($guardName === null) {
-            return $data->flatten()->unique()->values()->toArray();
-        }
-
-        return collect($data->get($guardName))->flatten()->unique()->values()->toArray();
-
+        return self::roleNamesGroupByGuardName()[$guardName ?? self::defaultGuardName()];
     }
 
-    /**
-     * @return array<int, string>
-     */
-    public static function extraRoleNamesByGuardName(?string $guardName = null): array
-    {
-        $data = collect(self::extraRoleNames());
-
-        if ($guardName === null) {
-            return $data->flatten()->unique()->values()->toArray();
-        }
-
-        return collect($data->get($guardName))->flatten()->unique()->values()->toArray();
-    }
-
-    public static function checkNoSameRoleNameOnExtra(): void
-    {
-        self::checkDefaultGuardNameExist();
-        $extraRoles = self::extraRoleNames();
-
-        if (blank($extraRoles)) {
-            return;
-        }
-
-        foreach (self::roleNames() as $guardName => $guardRoles) {
-
-            foreach ($guardRoles as $role) {
-                if (in_array($role, $extraRoles[$guardName], true)) {
-                    abort(500, 'The extra_role name "' . $role . '" is already defined in role_names in guard "' . $guardName . '".');
-                }
-            }
-        }
-
-    }
-
-    public static function checkDefaultGuardNameExist(): void
-    {
-
-        $guardNames = self::allGuardNames();
-        $authGuardNames = array_keys(config('auth.guards'));
-
-        $invalidGuardNames = [];
-        foreach ($guardNames as $guardName) {
-            if (! in_array($guardName, $authGuardNames, true)) {
-                $invalidGuardNames[] = $guardName;
-            }
-        }
-
-        if (filled($invalidGuardNames)) {
-            abort(500, 'Guard name "' . implode('", "', $invalidGuardNames) . '" is not defined in config/auth.php.');
-
-        }
-    }
+    //    /**
+    //     * @return array<int, string>
+    //     */
+    //    public static function guardNames(): array
+    //    {
+    //        return collect(self::roleNamesGroupByGuardName())->keys()
+    //            ->toArray();
+    //    }
 }

@@ -51,7 +51,7 @@ class RoleResource extends Resource
 
             return in_array(
                 $record->name,
-                PermissionConfig::extraRoleNamesByGuardName($record->guard_name),
+                PermissionConfig::roleNamesByGuardName($record->guard_name),
                 true
             );
         };
@@ -79,7 +79,7 @@ class RoleResource extends Resource
                                         $guards
                                             ->mapWithKeys(fn (string $guardName) => [$guardName => $guardName])
                                     )
-                                    ->default(config('auth.defaults.guard'))
+                                    ->default(PermissionConfig::defaultGuardName())
                                     ->reactive(),
                             ]),
                     ]),

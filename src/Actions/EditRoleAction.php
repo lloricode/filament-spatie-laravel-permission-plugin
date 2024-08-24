@@ -19,7 +19,7 @@ readonly class EditRoleAction
             abort(400, trans('Cannot update this role.'));
         }
 
-        $roleNames = PermissionConfig::extraRoleNamesByGuardName($roleData->guard_name);
+        $roleNames = PermissionConfig::roleNamesByGuardName($roleData->guard_name);
 
         $isExtraRole = in_array($role->name, $roleNames, true);
 

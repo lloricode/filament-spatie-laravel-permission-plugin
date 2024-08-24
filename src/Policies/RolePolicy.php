@@ -19,11 +19,10 @@ class RolePolicy
 
     public function view(User $user, RoleContract $role): bool
     {
-        if (in_array($role->name, PermissionConfig::extraRoleNamesByGuardName($role->guard_name), true)) {
-            return true;
-        }
-
-        if (in_array($role->name, PermissionConfig::roleNamesByGuardName($role->guard_name), true)) {
+        if (in_array($role->name, [
+            PermissionConfig::superAdmin($role->guard_name),
+            PermissionConfig::admin($role->guard_name),
+        ], true)) {
             return false;
         }
 
@@ -37,7 +36,10 @@ class RolePolicy
 
     public function update(User $user, RoleContract $role): bool
     {
-        if (in_array($role->name, PermissionConfig::roleNamesByGuardName($role->guard_name), true)) {
+        if (in_array($role->name, [
+            PermissionConfig::superAdmin($role->guard_name),
+            PermissionConfig::admin($role->guard_name),
+        ], true)) {
             return false;
         }
 
@@ -46,7 +48,11 @@ class RolePolicy
 
     public function delete(User $user, RoleContract $role): bool
     {
-        if (in_array($role->name, PermissionConfig::allRoleNames($role->guard_name), true)) {
+        if (in_array(
+            $role->name,
+            PermissionConfig::roleNamesByGuardName($role->guard_name),
+            true
+        )) {
             return false;
         }
 
