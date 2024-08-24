@@ -11,11 +11,21 @@ return [
      * role_names.*.admin is required
      */
     'role_names' => [
+
         // keyed by guard name
         'web' => [
+
             // required this cannot rename or delete or modify permissions
-            'super_admin' => 'super_admin', // no permission attached to this role, but it always skips gate checks
-            'admin' => 'admin', // all permissions attached to this role
+            /**
+             * no permission attached to this role, but it always skips gate checks
+             * see https://freek.dev/1325-when-to-use-gateafter-in-laravel
+             */
+            'super_admin' => 'super_admin',
+
+            /**
+             * all permissions attached to this role
+             */
+            'admin' => 'admin',
 
             //  as many as you want, below it can edit permissions but cannot rename or delete role names
             // sample 'user' => 'user',

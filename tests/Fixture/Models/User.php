@@ -8,13 +8,13 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern\PermissionUser;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern\HasUserPermission;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName
 {
     use HasRoles;
-    use PermissionUser;
+    use HasUserPermission;
 
     protected $guard_name = 'web';
 
