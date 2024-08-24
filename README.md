@@ -5,6 +5,25 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/lloricode/filament-spatie-laravel-permission-plugin/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/lloricode/filament-spatie-laravel-permission-plugin/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/lloricode/filament-spatie-laravel-permission-plugin.svg?style=flat-square)](https://packagist.org/packages/lloricode/filament-spatie-laravel-permission-plugin)
 
+## Requirements
+- Laravel 11.20+
+- PHP 8.2+
+- [Spatie/laravel-permission 6.9+](https://github.com/spatie/laravel-permission/tree/6.9.0)
+- Filament 3.2.98+
+
+## Pre-requisite
+
+To be able to use this package, you need to have [spatie/laravel-permission v6.9+](https://github.com/spatie/laravel-permission/tree/6.9.0) installed.
+Then follow the installation guide of spatie/laravel-permission.
+
+This has used a [wildcard](https://spatie.be/docs/laravel-permission/v6/basic-usage/wildcard-permissions) permission based.
+So you need to set this on your `config/permission.php` file.
+
+```php
+// config/permission.php
+'enable_wildcard_permission' => true,
+```
+
 ## Installation
 
 You can install the package via composer:
