@@ -7,7 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts;
 interface HasPermissionUser
 {
     /**
-     * This will skipp all gate checks
+     * This will skip all gate checks
      */
     public function isSuperAdmin(?string $guardName = null): bool;
 
