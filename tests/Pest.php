@@ -7,8 +7,6 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultRoleSeeder;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\Models\Permission;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\Models\Role;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\Models\User;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\TestCase;
 
@@ -30,11 +28,6 @@ uses(
         Filament::setCurrentPanel(
             Filament::getPanel('test'),
         );
-
-        config([
-            'permission.models.role' => Role::class,
-            'permission.models.permission' => Permission::class,
-        ]);
 
     })
     ->in(__DIR__);

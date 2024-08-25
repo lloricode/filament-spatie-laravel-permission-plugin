@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Filament\Actions\DeleteAction;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\Models\Role;
+use Spatie\Permission\Contracts\Role as RoleContract;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertModelMissing;
@@ -25,7 +25,7 @@ it('can index list', function () {
 
     assertDatabaseCount('roles', 2);
 
-    $roles = Role::get();
+    $roles = app(RoleContract::class)->all();
 
     livewire(RoleResource\Pages\ListRoles::class)
         ->assertCountTableRecords(2)
