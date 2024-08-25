@@ -46,12 +46,13 @@ final class PermissionConfig
         return self::roleNamesGroupByGuardName()[$guardName ?? self::defaultGuardName()];
     }
 
-    //    /**
-    //     * @return array<int, string>
-    //     */
-    //    public static function guardNames(): array
-    //    {
-    //        return collect(self::roleNamesGroupByGuardName())->keys()
-    //            ->toArray();
-    //    }
+    /**
+     * @return array<string, string>
+     */
+    public static function customPermissionsNames(): array
+    {
+        $guardName ??= self::defaultGuardName();
+
+        return ConfigFacade::array('filament-permission.permission_names.' . $guardName);
+    }
 }

@@ -32,6 +32,15 @@ return [
         ],
     ],
 
+    'permission_names' => [
+        'web' => [
+            //            'viewLogViewer' => 'viewLogViewer',
+            //            'viewPulse' => 'viewPulse',
+            //            'downloadBackup' => 'downloadBackup',
+            //            'deleteBackup' => 'deleteBackup',
+        ],
+    ],
+
     /**
      * You can use this seeder class to your own project level seeder.
      * But this is also able to sync your adjusted permissions name by using the ready made artisan command
@@ -48,6 +57,7 @@ return [
          * - public methods from Model policies class from your filament resources.
          * - filament pages that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages`.
          * - filament widgets that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets`.
+         * - enum class that has permission name as cases. see config `permission_name_enum`
          */
         'permissions' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder::class,
     ],

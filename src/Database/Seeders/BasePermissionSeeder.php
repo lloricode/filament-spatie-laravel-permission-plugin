@@ -33,6 +33,9 @@ abstract class BasePermissionSeeder extends Seeder
 
                     $output->title(sprintf('Seeding permissions for guard: [%s] ...', $guardName));
 
+                    $output->text('resources');
+                    $this->seedResource($permissionSeeder->resources, $guardName);
+
                     $output->text('panels');
                     $this->seedPanelsPagesWidgets($permissionSeeder->panels, $guardName);
 
@@ -42,8 +45,8 @@ abstract class BasePermissionSeeder extends Seeder
                     $output->text('widgets');
                     $this->seedPanelsPagesWidgets($permissionSeeder->widgets, $guardName);
 
-                    $output->text('resources');
-                    $this->seedResource($permissionSeeder->resources, $guardName);
+                    $output->text('custom permissions');
+                    $this->seedPanelsPagesWidgets($permissionSeeder->customs, $guardName);
 
                     $allPermissionNames = $permissionSeeder->allPermissionNames();
 
@@ -58,10 +61,11 @@ abstract class BasePermissionSeeder extends Seeder
                         ->whereNotIn('name', $allPermissionNames)
                         ->delete();
 
+                    $this->tableResources($permissionSeeder->resources);
                     $this->tablePagesPanelWidgets('panels', $permissionSeeder->panels);
                     $this->tablePagesPanelWidgets('pages', $permissionSeeder->pages);
                     $this->tablePagesPanelWidgets('widgets', $permissionSeeder->widgets);
-                    $this->tableResources($permissionSeeder->resources);
+                    $this->tablePagesPanelWidgets('custom permissions', $permissionSeeder->customs);
 
                     $output->newLine();
                 }

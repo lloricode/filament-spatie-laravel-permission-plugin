@@ -8,12 +8,17 @@ readonly class PermissionSeeder
 {
     /**
      * @param  array<int, ResourceSeeder>  $resources
+     * @param  array<int, string>  $panels
+     * @param  array<int, string>  $pages
+     * @param  array<int, string>  $widgets
+     * @param  array<int, string>  $customs
      */
     public function __construct(
+        public array $resources,
         public array $panels,
         public array $pages,
         public array $widgets,
-        public array $resources,
+        public array $customs,
     ) {}
 
     /**
@@ -23,7 +28,8 @@ readonly class PermissionSeeder
     {
         $collect = collect($this->panels)
             ->merge($this->pages)
-            ->merge($this->widgets);
+            ->merge($this->widgets)
+            ->merge($this->customs);
 
         foreach ($this->resources as $resource) {
             $collect = $collect->merge($resource->permissionNames);

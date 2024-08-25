@@ -7,6 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Support\Str;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
@@ -42,7 +43,7 @@ final class FilamentPermissionGenerateName
             $page = $page::class;
         }
 
-        return once(fn () => PermissionType::pages->value . '.' . Str::of($page)->classBasename()->camel());
+        return PermissionType::pages->value . '.' . Str::of($page)->classBasename()->camel();
     }
 
     /** @param  HasPermissionWidgets|class-string<HasPermissionWidgets>  $widget */
@@ -52,6 +53,15 @@ final class FilamentPermissionGenerateName
             $widget = $widget::class;
         }
 
-        return once(fn () => PermissionType::widgets->value . '.' . Str::of($widget)->classBasename()->camel());
+        return PermissionType::widgets->value . '.' . Str::of($widget)->classBasename()->camel();
+    }
+
+    public static function getCustomPermissionName(string $customPermissionName): string
+    {
+        if (! in_array($customPermissionName, PermissionConfig::customPermissionsNames(), true)) {
+            throw new \Exception('Custom permission [' . $customPermissionName . '] not found.');
+        }
+
+        return PermissionType::customs->value . '.' . $customPermissionName;
     }
 }

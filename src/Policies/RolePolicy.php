@@ -19,10 +19,7 @@ class RolePolicy
 
     public function view(User $user, RoleContract $role): bool
     {
-        if (in_array($role->name, [
-            PermissionConfig::superAdmin($role->guard_name),
-            PermissionConfig::admin($role->guard_name),
-        ], true)) {
+        if ($role->name === PermissionConfig::superAdmin($role->guard_name)) {
             return false;
         }
 
@@ -36,10 +33,7 @@ class RolePolicy
 
     public function update(User $user, RoleContract $role): bool
     {
-        if (in_array($role->name, [
-            PermissionConfig::superAdmin($role->guard_name),
-            PermissionConfig::admin($role->guard_name),
-        ], true)) {
+        if ($role->name === PermissionConfig::superAdmin($role->guard_name)) {
             return false;
         }
 
