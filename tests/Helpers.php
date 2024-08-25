@@ -18,12 +18,21 @@ function loginAsSuperAdmin()
     return $user;
 }
 
-// get user admin role
 function getSuperAdminRole(): RoleContract & Model
 {
     /** @var RoleContract&Model $role */
     $role = app(RoleContract::class)->findByName(
         name: PermissionConfig::superAdmin(),
+    );
+
+    return $role;
+}
+
+function getAdminRole(): RoleContract & Model
+{
+    /** @var RoleContract&Model $role */
+    $role = app(RoleContract::class)->findByName(
+        name: PermissionConfig::admin(),
     );
 
     return $role;
