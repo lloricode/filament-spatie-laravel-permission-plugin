@@ -85,7 +85,7 @@ final class PermissionSchema
                 })
                 ->afterStateHydrated(function (Forms\Components\Toggle $component, ?RoleContract $record, Set $set, Get $get): void {
 
-//                    self::refreshToggleSelectAllState(record: $record, set: $set, get: $get);
+                    //                    self::refreshToggleSelectAllState(record: $record, set: $set, get: $get);
 
                     if ($record === null) {
                         $set('select_all', false);
@@ -98,7 +98,7 @@ final class PermissionSchema
                     foreach (PermissionType::cases() as $permissionType) {
                         foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[$permissionType->value] ?? [] as $parentPermission => $permissionsDatas) {
 
-                            if (!$record->hasPermissionTo($parentPermission, self::$guardName)) {
+                            if (! $record->hasPermissionTo($parentPermission, self::$guardName)) {
                                 $all = false;
 
                                 break;

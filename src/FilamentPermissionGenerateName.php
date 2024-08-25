@@ -35,7 +35,7 @@ final class FilamentPermissionGenerateName
         );
     }
 
-    /** @param  \Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages|class-string<\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages>  $page */
+    /** @param  HasPermissionPages|class-string<HasPermissionPages>  $page */
     public static function getPagePermissionName(HasPermissionPages | string $page): string
     {
         if ($page instanceof HasPermissionPages) {
@@ -45,7 +45,7 @@ final class FilamentPermissionGenerateName
         return once(fn () => PermissionType::pages->value . '.' . Str::of($page)->classBasename()->camel());
     }
 
-    /** @param  \Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets|class-string<\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets>  $widget */
+    /** @param  HasPermissionWidgets|class-string<HasPermissionWidgets>  $widget */
     public static function getWidgetPermissionName(HasPermissionWidgets | string $widget): string
     {
         if ($widget instanceof HasPermissionWidgets) {
