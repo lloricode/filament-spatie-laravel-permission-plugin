@@ -132,43 +132,39 @@ final class PermissionSchema
                         ]),
                     Forms\Components\Tabs\Tab::make(trans('Panels'))
                         ->schema(function () {
-                            $return = [];
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::panels->value] ?? [] as $parentPermission => $permissionsDatas) {
-                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                                return [self::abilities($permissionsDatas, $parentPermission)];
                             }
 
-                            return $return;
+                            return [];
                         }),
                     Forms\Components\Tabs\Tab::make(trans('Pages'))
                         ->schema(function () {
-                            $return = [];
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::pages->value] ?? [] as $parentPermission => $permissionsDatas) {
-                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                                return [self::abilities($permissionsDatas, $parentPermission)];
                             }
 
-                            return $return;
+                            return [];
                         }),
                     Forms\Components\Tabs\Tab::make(trans('Widgets'))
                         ->schema(function () {
-                            $return = [];
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::widgets->value] ?? [] as $parentPermission => $permissionsDatas) {
-                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                                return [self::abilities($permissionsDatas, $parentPermission)];
                             }
 
-                            return $return;
+                            return [];
                         }),
                     Forms\Components\Tabs\Tab::make(trans('Custom permissions'))
                         ->schema(function () {
-                            $return = [];
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::customs->value] ?? [] as $parentPermission => $permissionsDatas) {
-                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                                return [self::abilities($permissionsDatas, $parentPermission)];
                             }
 
-                            return $return;
+                            return [];
                         }),
                 ]),
 
