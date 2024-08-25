@@ -9,15 +9,10 @@ use Filament\Panel;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 
 final class FilamentPermissionGenerateName
 {
-    public const PANELS = 'panels';
-
-    public const WIDGETS = 'widgets';
-
-    public const PAGES = 'pages';
-
     private function __construct() {}
 
     public static function getPanelPermissionName(string | Panel $panel): string
@@ -35,7 +30,7 @@ final class FilamentPermissionGenerateName
                     $panelObject = $panel;
                 }
 
-                return self::PANELS . '.' . $panelObject->getId();
+                return PermissionType::panels->value . '.' . $panelObject->getId();
             }
         );
     }
@@ -47,7 +42,7 @@ final class FilamentPermissionGenerateName
             $page = $page::class;
         }
 
-        return once(fn () => self::PAGES . '.' . Str::of($page)->classBasename()->camel());
+        return once(fn () => PermissionType::pages->value . '.' . Str::of($page)->classBasename()->camel());
     }
 
     /** @param  \Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets|class-string<\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets>  $widget */
@@ -57,6 +52,6 @@ final class FilamentPermissionGenerateName
             $widget = $widget::class;
         }
 
-        return once(fn () => self::WIDGETS . '.' . Str::of($widget)->classBasename()->camel());
+        return once(fn () => PermissionType::widgets->value . '.' . Str::of($widget)->classBasename()->camel());
     }
 }

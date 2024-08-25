@@ -13,6 +13,7 @@ use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionGenerateName;
 
 class DefaultPermissionSeeder extends BasePermissionSeeder
@@ -40,7 +41,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     {
         return collect(Filament::getPanels())
             ->map(fn (Panel $panel) => FilamentPermissionGenerateName::getPanelPermissionName($panel))
-            ->prepend(FilamentPermissionGenerateName::PANELS)
+            ->prepend(PermissionType::panels->value)
             ->values()
             ->sort()
             ->toArray();
@@ -93,7 +94,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
             return [];
         }
 
-        $permissionNames->prepend(FilamentPermissionGenerateName::WIDGETS);
+        $permissionNames->prepend(PermissionType::widgets->value);
 
         return $permissionNames->sort()->toArray();
     }
@@ -113,7 +114,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
             return [];
         }
 
-        $permissionNames->prepend(FilamentPermissionGenerateName::PAGES);
+        $permissionNames->prepend(PermissionType::pages->value);
 
         return $permissionNames->sort()->toArray();
     }

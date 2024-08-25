@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Support;
+namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Data;
+
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 
 final readonly class PermissionData
 {
     public bool $is_parent;
+
+    public PermissionType $type;
 
     public string $parent_name;
 
@@ -28,6 +32,14 @@ final readonly class PermissionData
             $this->parent_name = $exploded[0];
             $this->child_name = $exploded[1];
         }
+
+        $this->type = match ($this->parent_name) {
+            PermissionType::panels->value => PermissionType::panels,
+            PermissionType::pages->value => PermissionType::pages,
+            PermissionType::widgets->value => PermissionType::widgets,
+            PermissionType::customs->value => PermissionType::customs,
+            default => PermissionType::resources,
+        };
 
     }
 }

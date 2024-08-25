@@ -10,10 +10,9 @@ use Filament\Forms\Set;
 use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Support\PermissionData;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\PermissionData;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\PermissionRegistrar;
 
 final class PermissionSchema
 {
@@ -30,9 +29,9 @@ final class PermissionSchema
         self::$guardName = $guardName;
         unset($guardName);
 
-        if (self::permissionGroupByParent()->isEmpty()) {
+        if (PermissionCollection::groupByTypeThenParent(self::$guardName)->isEmpty()) {
             return [
-                Forms\Components\Placeholder::make(trans('No Permission on guard name :value', ['value' => self::$guardName])),
+                Forms\Components\Placeholder::make(trans('No Permission on guard name :guard_name', ['guard_name' => self::$guardName])),
             ];
         }
 
@@ -43,25 +42,29 @@ final class PermissionSchema
                     $component->state($record ? $record->permissions->pluck('name') : []);
                 })
                 ->dehydrateStateUsing(
-                    fn (Get $get): array => self::permissionGroupByParent()
-                        ->reduce(
-                            function (
-                                CollectionSupport $result,
-                                CollectionSupport $permissionGroup,
-                                string $parentPermission
-                            ) use ($get): CollectionSupport {
+                    function (Get $get): array {
+                        $permissionNames = [];
 
-                                if ($get($parentPermission) ?? false) {
-                                    $result->push($parentPermission);
-                                } elseif (filled($names = $get("{$parentPermission}_abilities"))) {
-                                    $result = $result->merge($names);
+                        foreach (PermissionType::cases() as $permissionType) {
+                            foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[$permissionType->value] ?? [] as $parentPermission => $permissionsDatas) {
+
+                                if (blank($names = $get("{$parentPermission}_abilities"))) {
+                                    continue;
                                 }
 
-                                return $result;
-                            },
-                            collect()
-                        )
-                        ->toArray()
+                                if (count($names) === count($permissionsDatas)) {
+                                    $permissionNames[] = $parentPermission;
+
+                                    continue;
+                                }
+
+                                $permissionNames = array_merge($permissionNames, $names);
+
+                            }
+                        }
+
+                        return $permissionNames;
+                    }
                 ),
 
             Forms\Components\Toggle::make('select_all')
@@ -70,178 +73,266 @@ final class PermissionSchema
                 ->offIcon('heroicon-s-shield-exclamation')
                 ->helperText(trans('Enable all Permissions for this role'))
                 ->reactive()
+                ->dehydrated(false)
                 ->afterStateUpdated(function (Get $get, Set $set, bool $state): void {
-                    self::updatedToggleSelectAllState(get: $get, set: $set, state: $state);
+
+                    foreach (PermissionType::cases() as $permissionType) {
+                        foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[$permissionType->value] ?? [] as $parentPermission => $permissionsDatas) {
+                            $set("{$parentPermission}_abilities", $state ? $permissionsDatas->pluck('name')->toArray() : []);
+                        }
+                    }
+
                 })
-                ->afterStateHydrated(function (Forms\Components\Toggle $component, ?RoleContract $record): void {
+                ->afterStateHydrated(function (Forms\Components\Toggle $component, ?RoleContract $record, Set $set, Get $get): void {
+
+//                    self::refreshToggleSelectAllState(record: $record, set: $set, get: $get);
 
                     if ($record === null) {
-                        $component->state(false);
+                        $set('select_all', false);
 
                         return;
                     }
 
                     $all = true;
 
-                    foreach (self::permissions() as $permissionData) {
+                    foreach (PermissionType::cases() as $permissionType) {
+                        foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[$permissionType->value] ?? [] as $parentPermission => $permissionsDatas) {
 
-                        if (! $record->hasPermissionTo($permissionData->name, self::$guardName)) {
-                            $all = false;
+                            if (!$record->hasPermissionTo($parentPermission, self::$guardName)) {
+                                $all = false;
 
+                                break;
+                            }
+
+                        }
+
+                        if ($all === false) {
                             break;
                         }
                     }
 
-                    $component->state($all);
+                    $set('select_all', $all);
+                }),
 
-                })
-                ->dehydrated(false),
+            Forms\Components\Tabs::make()
+                ->tabs([
+                    Forms\Components\Tabs\Tab::make(trans('Resources'))
+//                        ->badge(111)
+                        ->schema([
+                            Forms\Components\Grid::make()
+                                ->schema(function () {
+                                    $return = [];
 
-            Forms\Components\Grid::make(['sm' => 2])
-                ->schema(
-                    /////////////////////////////////////////////////////////////////////////////////////////// start
-                    self::permissionGroupByParent()
-                        ->map(
-                            fn (CollectionSupport $permissionsDatas, string $parentPermission): Forms\Components\Section => Forms\Components\Section::make()
-                                ->schema([
+                                    foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::resources->value] ?? [] as $parentPermission => $permissionsDatas) {
+                                        $return[] = self::resourceAbilities($permissionsDatas, $parentPermission);
+                                    }
 
-                                    Forms\Components\Toggle::make($parentPermission)
-                                        ->translateLabel(Config::boolean('filament-permission.translated', false))
-                                        ->onIcon('heroicon-s-lock-open')
-                                        ->offIcon('heroicon-s-lock-closed')
-                                        ->reactive()
-                                        ->afterStateHydrated(
-                                            function (Forms\Components\Toggle $component, ?RoleContract $record) use (
-                                                $parentPermission
-                                            ): void {
-                                                if ($record === null) {
-                                                    $component->state(false);
+                                    return $return;
+                                }),
+                        ]),
+                    Forms\Components\Tabs\Tab::make(trans('Pages'))
+                        ->schema(function () {
+                            $return = [];
 
-                                                    return;
-                                                }
-                                                $component->state($record->hasPermissionTo($parentPermission, self::$guardName));
-                                            }
-                                        )
-                                        ->afterStateUpdated(
-                                            function (Set $set, Get $get, bool $state) use (
-                                                $parentPermission,
-                                                $permissionsDatas
-                                            ): void {
-                                                self::updatedToggleSelectParentPermissionState(
-                                                    parentPermission: $parentPermission,
-                                                    permissionsDatas: $permissionsDatas,
-                                                    get: $get,
-                                                    set: $set,
-                                                    state: $state,
-                                                );
-                                            }
-                                        )
-                                        ->dehydrated(false),
+                            foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::pages->value] ?? [] as $parentPermission => $permissionsDatas) {
+                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                            }
 
-                                    Forms\Components\Fieldset::make('Abilities')
-                                        ->translateLabel()
-                                        ->schema([
-                                            /////// start CheckboxList
-                                            Forms\Components\CheckboxList::make("{$parentPermission}_abilities")
-                                                ->hiddenLabel()
-                                                ->options(
-                                                    self::parentAbilitiesLabeled(
-                                                        permissionsDatas: $permissionsDatas
-                                                    )
-                                                        ->sort()
-                                                        ->toArray()
-                                                )
-                                                ->columns(2)
-                                                ->reactive()
-                                                ->afterStateHydrated(
-                                                    function (Forms\Components\CheckboxList $component, ?RoleContract $record) use (
-                                                        $permissionsDatas,
-                                                        $parentPermission
-                                                    ): void {
+                            return $return;
+                        }),
+                    Forms\Components\Tabs\Tab::make(trans('Widgets'))
+                        ->schema(function () {
+                            $return = [];
 
-                                                        if ($record === null) {
-                                                            $component->state([]);
+                            foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::widgets->value] ?? [] as $parentPermission => $permissionsDatas) {
+                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                            }
 
-                                                            return;
-                                                        }
+                            return $return;
+                        }),
+                    Forms\Components\Tabs\Tab::make(trans('Custom permissions'))
+                        ->schema(function () {
+                            $return = [];
 
-                                                        if ($record->hasPermissionTo($parentPermission, self::$guardName)) {
-                                                            $component->state($permissionsDatas->pluck('name')->toArray());
+                            foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::customs->value] ?? [] as $parentPermission => $permissionsDatas) {
+                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                            }
 
-                                                            return;
-                                                        }
+                            return $return;
+                        }),
+                ]),
 
-                                                        $names = [];
-
-                                                        foreach ($permissionsDatas as $permissionData) {
-
-                                                            if ($record->hasPermissionTo($permissionData->name, self::$guardName)) {
-                                                                $names[] = $permissionData->name;
-                                                            }
-                                                        }
-
-                                                        $component->state($names);
-
-                                                    }
-                                                )
-                                                ->afterStateUpdated(
-                                                    function (Set $set, Get $get, CollectionSupport | array $state) use (
-                                                        $parentPermission,
-                                                        $permissionsDatas
-                                                    ): void {
-                                                        self::updatedCheckboxListPermissionState(
-                                                            parentPermission: $parentPermission,
-                                                            permissionDatas: $permissionsDatas,
-                                                            set: $set,
-                                                            get: $get,
-                                                            state: $state
-                                                        );
-                                                    }
-                                                )
-                                                ->dehydrated(false),
-                                            /////// end CheckboxList
-                                        ])
-                                        ->columnSpan(1),
-
-                                ])
-                                ->columnSpan(1)
-                        )
-                        ->toArray(),
-                    /////////////////////////////////////////////////////////////////////////////////////////// end
-                ),
         ];
-    }
-
-    /** @return CollectionSupport<int, PermissionData> */
-    private static function permissions(): CollectionSupport
-    {
-        return once(
-            fn () => app(PermissionRegistrar::class)
-                ->getPermissions(['guard_name' => self::$guardName])
-                ->sortBy('name')
-                ->map(fn (PermissionContract $permission): PermissionData => new PermissionData($permission->name))
-        );
-    }
-
-    /** @return CollectionSupport<string, CollectionSupport<int, PermissionData>> */
-    private static function permissionGroupByParent(): CollectionSupport
-    {
-        return once(
-            fn () => self::permissions()
-                ->filter(
-                    fn (PermissionData $permissionData): bool => ! $permissionData->is_parent
-                )
-                ->groupBy(
-                    fn (PermissionData $permissionData): string => $permissionData->parent_name
-                )
-        );
     }
 
     /**
      * @param  CollectionSupport<int, PermissionData>  $permissionsDatas
-     * @return CollectionSupport<string, string>
      */
-    private static function parentAbilitiesLabeled(CollectionSupport $permissionsDatas): CollectionSupport
+    private static function resourceAbilities(CollectionSupport $permissionsDatas, string $parentPermission): Forms\Components\Section
+    {
+        return Forms\Components\Section::make(Str::headline($parentPermission))
+            ->translateLabel()
+//            ->description('')
+            ->collapsible()
+            ->compact()
+            ->schema([
+
+                Forms\Components\CheckboxList::make("{$parentPermission}_abilities")
+                    ->hiddenLabel()
+                    ->bulkToggleable()
+                    ->columns(4)
+                    ->reactive()
+                    ->dehydrated(false)
+                    ->options(
+                        self::parentAbilitiesLabeled(
+                            permissionsDatas: $permissionsDatas
+                        )
+                    )
+                    ->afterStateHydrated(
+                        function (Forms\Components\CheckboxList $component, ?RoleContract $record) use (
+                            $permissionsDatas,
+                            $parentPermission
+                        ): void {
+
+                            self::afterStateHydratedAbilities(
+                                component: $component,
+                                record: $record,
+                                permissionsDatas: $permissionsDatas,
+                                parentPermission: $parentPermission,
+                            );
+
+                        }
+                    )
+                    ->afterStateUpdated(
+                        function (Set $set, Get $get, RoleContract $record): void {
+                            self::refreshToggleSelectAllState(
+                                record: $record,
+                                set: $set,
+                                get: $get
+                            );
+                        }
+                    ),
+
+            ]);
+    }
+
+    /**
+     * @param  CollectionSupport<int, PermissionData>  $permissionsDatas
+     */
+    private static function abilities(CollectionSupport $permissionsDatas, string $parentPermission): Forms\Components\CheckboxList
+    {
+        return Forms\Components\CheckboxList::make("{$parentPermission}_abilities")
+            ->hiddenLabel()
+            ->bulkToggleable()
+            ->columns(4)
+            ->reactive()
+            ->dehydrated(false)
+            ->options(
+                self::parentAbilitiesLabeled(
+                    permissionsDatas: $permissionsDatas
+                )
+            )
+            ->afterStateHydrated(
+                function (Forms\Components\CheckboxList $component, ?RoleContract $record) use (
+                    $permissionsDatas,
+                    $parentPermission
+                ): void {
+
+                    self::afterStateHydratedAbilities(
+                        component: $component,
+                        record: $record,
+                        permissionsDatas: $permissionsDatas,
+                        parentPermission: $parentPermission,
+                    );
+
+                }
+            )
+            ->afterStateUpdated(
+                function (Set $set, Get $get, RoleContract $record): void {
+                    self::refreshToggleSelectAllState(
+                        record: $record,
+                        set: $set,
+                        get: $get
+                    );
+                }
+            );
+    }
+
+    /**
+     * @param  CollectionSupport<int, PermissionData>  $permissionsDatas
+     */
+    private static function afterStateHydratedAbilities(
+        Forms\Components\CheckboxList $component,
+        ?RoleContract $record,
+        CollectionSupport $permissionsDatas,
+        string $parentPermission
+    ): void {
+        if ($record === null) {
+            $component->state([]);
+
+            return;
+        }
+
+        if ($record->hasPermissionTo($parentPermission, self::$guardName)) {
+            $component->state($permissionsDatas->pluck('name')->toArray());
+
+            return;
+        }
+
+        $names = [];
+
+        foreach ($permissionsDatas as $permissionData) {
+
+            if ($record->hasPermissionTo($permissionData->name, self::$guardName)) {
+                $names[] = $permissionData->name;
+            }
+        }
+
+        $component->state($names);
+    }
+
+    private static function refreshToggleSelectAllState(?RoleContract $record, Set $set, Get $get): void
+    {
+
+        if ($record === null) {
+            $set('select_all', false);
+
+            return;
+        }
+
+        $all = true;
+
+        foreach (PermissionType::cases() as $permissionType) {
+
+            foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[$permissionType->value] ?? [] as $parentPermission => $permissionsDatas) {
+
+                if (blank($names = $get("{$parentPermission}_abilities"))) {
+                    $all = false;
+
+                    break;
+                }
+
+                if (count($names) === count($permissionsDatas)) {
+                    continue;
+                }
+
+                $all = false;
+
+                break;
+            }
+
+            if ($all === false) {
+                break;
+            }
+        }
+
+        $set('select_all', $all);
+    }
+
+    /**
+     * @param  CollectionSupport<int, PermissionData>  $permissionsDatas
+     */
+    private static function parentAbilitiesLabeled(CollectionSupport $permissionsDatas): array
     {
         return $permissionsDatas
             ->mapWithKeys(function (PermissionData $permissionData) {
@@ -259,67 +350,8 @@ final class PermissionSchema
                 return [
                     $permissionData->name => $ability,
                 ];
-            });
-    }
-
-    /** @param  CollectionSupport<int, PermissionData>  $permissionDatas */
-
-    /**
-     * @param  CollectionSupport<int, PermissionData>  $permissionDatas
-     * @param  CollectionSupport<int, int>|array<int, int>  $state
-     */
-    private static function updatedCheckboxListPermissionState(
-        string $parentPermission,
-        CollectionSupport $permissionDatas,
-        Set $set,
-        Get $get,
-        CollectionSupport | array $state
-    ): void {
-        $set($parentPermission, $permissionDatas->count() === count($state));
-
-        self::refreshToggleSelectAllState(get: $get, set: $set);
-    }
-
-    /** @param  CollectionSupport<int, PermissionData>  $permissionsDatas */
-    private static function updatedToggleSelectParentPermissionState(
-        string $parentPermission,
-        CollectionSupport $permissionsDatas,
-        Get $get,
-        Set $set,
-        bool $state
-    ): void {
-        $set($parentPermission . '_abilities', $get($parentPermission)
-            ? self::parentAbilitiesLabeled($permissionsDatas)->keys()
-            : []);
-
-        self::refreshToggleSelectAllState(get: $get, set: $set);
-    }
-
-    private static function updatedToggleSelectAllState(Get $get, Set $set, bool $state): void
-    {
-        foreach (self::permissionGroupByParent() as $parentPermissionName => $permissionDatas) {
-            $set($parentPermissionName, $state);
-            $set(
-                "{$parentPermissionName}_abilities",
-                $state ? $permissionDatas
-                    ->pluck('name')
-                    : []
-            );
-        }
-    }
-
-    private static function refreshToggleSelectAllState(Get $get, Set $set): void
-    {
-        $selectAll = true;
-
-        foreach (self::permissionGroupByParent() as $parentPermission => $permissionAbilities) {
-            if ($get($parentPermission) === false) {
-                $selectAll = false;
-
-                break;
-            }
-        }
-
-        $set('select_all', $selectAll);
+            })
+            ->sort()
+            ->toArray();
     }
 }
