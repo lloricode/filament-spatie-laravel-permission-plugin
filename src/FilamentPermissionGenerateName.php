@@ -56,9 +56,9 @@ final class FilamentPermissionGenerateName
         return PermissionType::widgets->value . '.' . Str::of($widget)->classBasename()->camel();
     }
 
-    public static function getCustomPermissionName(string $customPermissionName): string
+    public static function getCustomPermissionName(string $customPermissionName, ?string $guardName = null): string
     {
-        if (! in_array($customPermissionName, PermissionConfig::customPermissionsNames(), true)) {
+        if (! in_array($customPermissionName, PermissionConfig::customPermissionsNames($guardName), true)) {
             throw new \Exception('Custom permission [' . $customPermissionName . '] not found.');
         }
 

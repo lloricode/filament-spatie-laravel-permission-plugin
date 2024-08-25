@@ -32,7 +32,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
                 panels: $this->getPermissionsFromPanels(),
                 pages: $this->getPermissionsFromPages(),
                 widgets: $this->getPermissionsFromWidgets(),
-                customs: self::getCustomPermissionNames()
+                customs: self::getCustomPermissionNames(PermissionConfig::defaultGuardName())
             ),
         ];
     }
@@ -121,9 +121,9 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     }
 
     /** @return array<int, string> */
-    protected function getCustomPermissionNames(): array
+    protected function getCustomPermissionNames(string $guardName): array
     {
-        $customs = collect(PermissionConfig::customPermissionsNames())
+        $customs = collect(PermissionConfig::customPermissionsNames($guardName))
             ->map(fn (string $custom) => FilamentPermissionGenerateName::getCustomPermissionName($custom));
 
         if ($customs->isEmpty()) {

@@ -49,7 +49,7 @@ final class PermissionConfig
     /**
      * @return array<string, string>
      */
-    public static function customPermissionsNames(): array
+    public static function customPermissionsNames(?string $guardName = null): array
     {
         $guardName ??= self::defaultGuardName();
 
