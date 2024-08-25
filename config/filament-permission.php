@@ -13,6 +13,7 @@ return [
     'role_names' => [
 
         // keyed by guard name
+        // format snake_case
         'web' => [
 
             // required this cannot rename or delete or modify permissions
@@ -33,11 +34,13 @@ return [
     ],
 
     'permission_names' => [
+        // keyed by guard name
+        // format camelCase
         'web' => [
-            //            'viewLogViewer' => 'viewLogViewer',
-            //            'viewPulse' => 'viewPulse',
-            //            'downloadBackup' => 'downloadBackup',
-            //            'deleteBackup' => 'deleteBackup',
+            // 'viewLogViewer' => 'viewLogViewer',
+            // 'viewPulse' => 'viewPulse',
+            // 'downloadBackup' => 'downloadBackup',
+            // 'deleteBackup' => 'deleteBackup',
         ],
     ],
 
