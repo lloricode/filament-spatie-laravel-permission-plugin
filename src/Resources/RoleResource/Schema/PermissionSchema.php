@@ -130,6 +130,16 @@ final class PermissionSchema
                                     return $return;
                                 }),
                         ]),
+                    Forms\Components\Tabs\Tab::make(trans('Panels'))
+                        ->schema(function () {
+                            $return = [];
+
+                            foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::panels->value] ?? [] as $parentPermission => $permissionsDatas) {
+                                $return[] = self::abilities($permissionsDatas, $parentPermission);
+                            }
+
+                            return $return;
+                        }),
                     Forms\Components\Tabs\Tab::make(trans('Pages'))
                         ->schema(function () {
                             $return = [];
