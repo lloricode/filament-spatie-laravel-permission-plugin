@@ -6,9 +6,8 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource
 
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Actions\CreateRoleAction;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\RoleData;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource;
+use Spatie\Permission\Contracts\Role as RoleContract;
 
 class CreateRole extends CreateRecord
 {
@@ -17,7 +16,14 @@ class CreateRole extends CreateRecord
     #[\Override]
     protected function handleRecordCreation(array $data): Model
     {
-        return app(CreateRoleAction::class)
-            ->execute(new RoleData(...$data));
+        /** @var RoleContract&Model $role */
+        $role = app(RoleContract::class)->findOrCreate(
+            name: $data['name'],
+            guardName: $data['guard_name'],
+        );
+
+        $role->givePermissionTo($data['permissions']);
+
+        return $role;
     }
 }

@@ -7,8 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Actions\EditRoleAction;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\RoleData;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
@@ -28,11 +27,34 @@ class EditRole extends EditRecord
         ];
     }
 
+    /**
+     * @param  RoleContract&Model  $record
+     * @return RoleContract&Model
+     */
     #[\Override]
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        /** @var RoleContract&Model $record */
-        return app(EditRoleAction::class)
-            ->execute($record, new RoleData(...$data));
+        $roleNames = PermissionConfig::roleNamesByGuardName($data['guard_name'] ?? null);
+
+        $isExtraRole = in_array($record->name, $roleNames, true);
+
+        if ($record->name !== $data['name']) {
+
+            if ($isExtraRole) {
+                abort(400, trans('Cannot update role name of this role.'));
+            }
+
+        }
+
+        if (! $isExtraRole) {
+            $record->update([
+                'name' => $data['name'],
+                'guard_name' => $data['guard_name'],
+            ]);
+        }
+
+        $record->syncPermissions($data['permissions']);
+
+        return $record;
     }
 }
