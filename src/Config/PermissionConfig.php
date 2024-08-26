@@ -27,7 +27,7 @@ final class PermissionConfig
     {
         $guardName ??= self::defaultGuardName();
 
-        return ConfigFacade::string('filament-permission.role_names.' . $guardName . '.' . $roleKey);
+        return ConfigFacade::string('filament-permission.role_names.'.$guardName.'.'.$roleKey);
     }
 
     /**
@@ -53,6 +53,6 @@ final class PermissionConfig
     {
         $guardName ??= self::defaultGuardName();
 
-        return ConfigFacade::array('filament-permission.permission_names.' . $guardName);
+        return ConfigFacade::array('filament-permission.permission_names.'.$guardName);
     }
 }

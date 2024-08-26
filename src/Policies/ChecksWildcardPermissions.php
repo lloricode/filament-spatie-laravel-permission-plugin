@@ -11,7 +11,7 @@ trait ChecksWildcardPermissions
 {
     protected function checkWildcardPermissions(User $user): bool
     {
-        return $user->can($this->getResourceName() . '.' . $this->getAbility());
+        return $user->can($this->getResourceName().'.'.$this->getAbility());
     }
 
     private function getResourceName(): string

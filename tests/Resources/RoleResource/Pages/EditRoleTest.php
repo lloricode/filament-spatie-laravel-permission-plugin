@@ -26,7 +26,7 @@ it('can update role name', function () {
 
     livewire(EditRole::class, ['record' => $role->getRouteKey()])
         ->fillForm([
-            'name' => $name . ' new',
+            'name' => $name.' new',
             'guard_name' => PermissionConfig::defaultGuardName(),
         ])
         ->call('save')
@@ -34,7 +34,7 @@ it('can update role name', function () {
 
     assertDatabaseCount('roles', 3);
     assertDatabaseHas('roles', [
-        'name' => $name . ' new',
+        'name' => $name.' new',
     ]);
 });
 it('can not update admin', function () {

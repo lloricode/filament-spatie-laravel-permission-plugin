@@ -18,7 +18,7 @@ function loginAsSuperAdmin()
     return $user;
 }
 
-function getSuperAdminRole(): RoleContract & Model
+function getSuperAdminRole(): RoleContract&Model
 {
     /** @var RoleContract&Model $role */
     $role = app(RoleContract::class)->findByName(
@@ -28,7 +28,7 @@ function getSuperAdminRole(): RoleContract & Model
     return $role;
 }
 
-function getAdminRole(): RoleContract & Model
+function getAdminRole(): RoleContract&Model
 {
     /** @var RoleContract&Model $role */
     $role = app(RoleContract::class)->findByName(
@@ -38,7 +38,7 @@ function getAdminRole(): RoleContract & Model
     return $role;
 }
 
-function createRole(string $name, ?string $guard = null): RoleContract & Model
+function createRole(string $name, ?string $guard = null): RoleContract&Model
 {
     /** @var RoleContract&Model $role */
     $role = app(RoleContract::class)->findOrCreate(

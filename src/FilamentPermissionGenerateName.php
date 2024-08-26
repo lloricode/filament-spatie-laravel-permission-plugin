@@ -16,7 +16,7 @@ final class FilamentPermissionGenerateName
 {
     private function __construct() {}
 
-    public static function getPanelPermissionName(string | Panel $panel): string
+    public static function getPanelPermissionName(string|Panel $panel): string
     {
         return once(
             function () use ($panel) {
@@ -24,44 +24,44 @@ final class FilamentPermissionGenerateName
                     $panelObject = Filament::getPanel($panel);
 
                     if ($panelObject->getId() !== $panel) {
-                        throw new \Exception('Panel [' . $panel . '] not found.');
+                        throw new \Exception('Panel ['.$panel.'] not found.');
                     }
 
                 } else {
                     $panelObject = $panel;
                 }
 
-                return PermissionType::panels->value . '.' . $panelObject->getId();
+                return PermissionType::panels->value.'.'.$panelObject->getId();
             }
         );
     }
 
     /** @param  HasPermissionPages|class-string<HasPermissionPages>  $page */
-    public static function getPagePermissionName(HasPermissionPages | string $page): string
+    public static function getPagePermissionName(HasPermissionPages|string $page): string
     {
         if ($page instanceof HasPermissionPages) {
             $page = $page::class;
         }
 
-        return PermissionType::pages->value . '.' . Str::of($page)->classBasename()->camel();
+        return PermissionType::pages->value.'.'.Str::of($page)->classBasename()->camel();
     }
 
     /** @param  HasPermissionWidgets|class-string<HasPermissionWidgets>  $widget */
-    public static function getWidgetPermissionName(HasPermissionWidgets | string $widget): string
+    public static function getWidgetPermissionName(HasPermissionWidgets|string $widget): string
     {
         if ($widget instanceof HasPermissionWidgets) {
             $widget = $widget::class;
         }
 
-        return PermissionType::widgets->value . '.' . Str::of($widget)->classBasename()->camel();
+        return PermissionType::widgets->value.'.'.Str::of($widget)->classBasename()->camel();
     }
 
     public static function getCustomPermissionName(string $customPermissionName, ?string $guardName = null): string
     {
         if (! in_array($customPermissionName, PermissionConfig::customPermissionsNames($guardName), true)) {
-            throw new \Exception('Custom permission [' . $customPermissionName . '] not found.');
+            throw new \Exception('Custom permission ['.$customPermissionName.'] not found.');
         }
 
-        return PermissionType::customs->value . '.' . $customPermissionName;
+        return PermissionType::customs->value.'.'.$customPermissionName;
     }
 }

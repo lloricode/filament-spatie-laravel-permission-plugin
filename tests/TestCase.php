@@ -54,7 +54,7 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
-//        config()->set('database.default', 'testing');
+        //        config()->set('database.default', 'testing');
 
         /*
         $migration = include __DIR__.'/../database/migrations/create_filament-spatie-laravel-permission-plugin_table.php.stub';
@@ -80,7 +80,7 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
-        $permission = require __DIR__ . '/../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
+        $permission = require __DIR__.'/../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
 
         $permission->up();
     }
