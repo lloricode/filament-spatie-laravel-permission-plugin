@@ -8,8 +8,8 @@ use Filament\Forms;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Collection as CollectionSupport;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\PermissionData;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 use Spatie\Permission\Contracts\Role as RoleContract;
@@ -349,7 +349,7 @@ final class PermissionSchema
                     ->snake(' ')
                     ->ucfirst();
 
-                if (Config::boolean('filament-permission.translated', false)) {
+                if (PermissionConfig::translated()) {
                     $ability = trans($ability);
                 }
 

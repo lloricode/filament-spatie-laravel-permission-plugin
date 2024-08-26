@@ -132,7 +132,8 @@ class RoleResource extends Resource
                 Tables\Actions\EditAction::make(),
 
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->disabled(fn (RoleContract $record): bool => $record->users->isNotEmpty()),
                 ]),
             ])
             ->defaultSort('updated_at', 'desc');

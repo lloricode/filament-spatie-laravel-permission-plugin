@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Config;
 
-use Illuminate\Support\Facades\Config as ConfigFacade;
+use Illuminate\Support\Facades\Config;
 
 final class PermissionConfig
 {
     public static function defaultGuardName(): string
     {
-        return ConfigFacade::string('auth.defaults.guard');
+        return Config::string('auth.defaults.guard');
     }
 
     public static function superAdmin(?string $guardName = null): string
@@ -27,7 +27,7 @@ final class PermissionConfig
     {
         $guardName ??= self::defaultGuardName();
 
-        return ConfigFacade::string('filament-permission.role_names.'.$guardName.'.'.$roleKey);
+        return Config::string('filament-permission.role_names.'.$guardName.'.'.$roleKey);
     }
 
     /**
@@ -35,7 +35,7 @@ final class PermissionConfig
      */
     public static function roleNamesGroupByGuardName(): array
     {
-        return ConfigFacade::array('filament-permission.role_names');
+        return Config::array('filament-permission.role_names');
     }
 
     /**
@@ -53,6 +53,16 @@ final class PermissionConfig
     {
         $guardName ??= self::defaultGuardName();
 
-        return ConfigFacade::array('filament-permission.permission_names.'.$guardName);
+        return Config::array('filament-permission.custom_permission_names.'.$guardName);
+    }
+
+    public static function translated(): bool
+    {
+        return Config::boolean('filament-permission.translated', false);
+    }
+
+    public static function customPermissionsNamesGivesToAdmin(): bool
+    {
+        return Config::boolean('filament-permission.custom_permission_names_gives_to_admin', false);
     }
 }

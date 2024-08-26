@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Seeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\Contracts\Role as RoleContract;
 
@@ -31,6 +33,11 @@ class DefaultRoleSeeder extends Seeder
                 if (PermissionConfig::admin($guardName) === $roleName) {
                     $role->givePermissionTo(
                         $this->permissionContract
+                            ->when(
+                                ! PermissionConfig::customPermissionsNamesGivesToAdmin(),
+                                fn (Builder $query) => $query
+                                    ->whereNotLike('name', PermissionType::customs->value.'%')
+                            )
                             ->where('guard_name', $guardName)
                             ->pluck('name')
                     );

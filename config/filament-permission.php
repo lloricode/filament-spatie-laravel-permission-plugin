@@ -33,7 +33,7 @@ return [
         ],
     ],
 
-    'permission_names' => [
+    'custom_permission_names' => [
         // keyed by guard name
         // format camelCase
         'web' => [
@@ -43,6 +43,8 @@ return [
             // 'deleteBackup' => 'deleteBackup',
         ],
     ],
+
+    'custom_permission_names_gives_to_admin' => true,
 
     /**
      * You can use this seeder class to your own project level seeder.
