@@ -60,7 +60,7 @@ return [
          * - public methods from Model policies class from your filament resources.
          * - filament pages that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages`.
          * - filament widgets that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets`.
-         * - enum class that has permission name as cases. see config `permission_name_enum`
+         * - from this config key `custom_permission_names`
          */
         'permissions' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder::class,
     ],
