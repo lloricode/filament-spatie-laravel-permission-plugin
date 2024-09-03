@@ -60,9 +60,4 @@ final class PermissionConfig
     {
         return Config::boolean('filament-permission.translated', false);
     }
-
-    public static function customPermissionsNamesGivesToAdmin(): bool
-    {
-        return Config::boolean('filament-permission.custom_permission_names_gives_to_admin', false);
-    }
 }

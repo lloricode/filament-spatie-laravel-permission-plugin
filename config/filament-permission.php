@@ -44,8 +44,6 @@ return [
         ],
     ],
 
-    'custom_permission_names_gives_to_admin' => true,
-
     /**
      * You can use this seeder class to your own project level seeder.
      * But this is also able to sync your adjusted permissions name by using the ready made artisan command
