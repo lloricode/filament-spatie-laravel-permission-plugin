@@ -53,6 +53,50 @@ use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionPlugin;
 ])
 ```
 
+### Setting up user model
+
+```php
+// ...
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern\PermissionUser;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionUser;
+
+class Admin extends Authenticatable implements HasPermissionUser // ...
+{
+    use PermissionUser;
+// ...
+```
+
+### Setting up Filament pages
+
+```php
+// ...
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern\PermissionPages;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
+
+class MyPage extends Page implements HasPermissionPages
+{
+    use PermissionPages;
+// ...
+```
+
+### Setting up Filament widgets
+
+```php
+// ...
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern\PermissionWidgets;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
+
+class MyWidget extends ChartWidget implements HasPermissionWidgets
+{
+    use PermissionWidgets;
+// ...
+```
+Finally, run this command to generate the permission.
+
+```bash
+php artisan permission:sync
+```
+
 ## Testing
 
 ```bash
