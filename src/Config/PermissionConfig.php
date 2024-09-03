@@ -60,4 +60,12 @@ final class PermissionConfig
     {
         return Config::boolean('filament-permission.translated', false);
     }
+
+    /**
+     * @return class-string|null
+     */
+    public static function rolePolicy(): ?string
+    {
+        return config('filament-permission.model_policies.role');
+    }
 }

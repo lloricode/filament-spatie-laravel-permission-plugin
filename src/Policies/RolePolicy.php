@@ -43,7 +43,7 @@ class RolePolicy
 
     public function update(User&HasPermissionUser $user, RoleContract $role): bool
     {
-        if (! $user->isSuperAdmin() && $role->name === PermissionConfig::admin($role->guard_name)) {
+        if (! $user->isSuperAdmin() && $role->name === PermissionConfig::superAdmin($role->guard_name)) {
             return false;
         }
 

@@ -52,7 +52,7 @@ return [
      */
     'seeders' => [
 
-        'roles' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultRoleSeeder::class,
+        'roles' => Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultRoleSeeder::class,
 
         /**
          * All permissions are generated base on your your setup.
@@ -62,7 +62,11 @@ return [
          * - filament widgets that's implements `\Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets`.
          * - from this config key `custom_permission_names`
          */
-        'permissions' => \Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder::class,
+        'permissions' => Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder::class,
+    ],
+
+    'model_policies' => [
+        'role' => Lloricode\FilamentSpatieLaravelPermissionPlugin\Policies\RolePolicy::class,
     ],
 
     'translated' => false,
