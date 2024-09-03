@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Anonymous function should return string\\|null but returns array\\|string\\|null\\.$#"
+			count: 1
+			path: src/Resources/RoleResource.php
+
+		-
 			message: "#^Method Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Schema\\\\PermissionCollection\\:\\:groupByType\\(\\) should return Illuminate\\\\Support\\\\Collection\\<string, Illuminate\\\\Support\\\\Collection\\<int, Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData\\>\\> but returns Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData\\>\\>\\.$#"
 			count: 1
 			path: src/Resources/RoleResource/Schema/PermissionCollection.php
