@@ -6,6 +6,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Illuminate\Support\Facades\Config;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource;
 
 class FilamentPermissionPlugin implements Plugin
@@ -25,7 +26,9 @@ class FilamentPermissionPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        if (! Config::boolean('permission.enable_wildcard_permission', false)) {
+            throw new \Exception('Please enable wildcard permission in your config/permission.php');
+        }
     }
 
     public static function make(): static

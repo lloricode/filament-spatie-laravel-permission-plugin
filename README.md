@@ -17,7 +17,7 @@ To be able to use this package, you need to have [spatie/laravel-permission v6.9
 Then follow the installation guide of spatie/laravel-permission.
 
 This has used a [wildcard](https://spatie.be/docs/laravel-permission/v6/basic-usage/wildcard-permissions) permission based.
-So you need to set this on your `config/permission.php` file.
+So you must to set this on your `config/permission.php` file, else it will throw an exception `Please enable wildcard permission in your config/permission.php`.
 
 ```php
 // config/permission.php

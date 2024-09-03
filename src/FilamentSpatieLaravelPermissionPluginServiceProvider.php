@@ -6,11 +6,9 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Gate;
-use Livewire\Features\SupportTesting\Testable;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Commands\PermissionSyncCommand;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionUser;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Policies\RolePolicy;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Testing\TestsFilamentSpatieLaravelPermissionPlugin;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -34,6 +32,7 @@ class FilamentSpatieLaravelPermissionPluginServiceProvider extends PackageServic
 
     public function packageBooted(): void
     {
+
         Gate::after(function (Authenticatable $user) {
 
             if ($user instanceof HasPermissionUser && $user->isSuperAdmin()) {
@@ -43,8 +42,5 @@ class FilamentSpatieLaravelPermissionPluginServiceProvider extends PackageServic
 
             return null;
         });
-
-        // Testing
-        Testable::mixin(new TestsFilamentSpatieLaravelPermissionPlugin);
     }
 }

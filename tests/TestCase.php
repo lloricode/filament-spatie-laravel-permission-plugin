@@ -68,6 +68,7 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
+        $app['config']->set('permission.enable_wildcard_permission', true);
     }
 
     protected function setUpDatabase()
