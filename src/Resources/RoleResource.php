@@ -154,4 +154,15 @@ class RoleResource extends Resource
             'edit' => RoleResource\Pages\EditRole::route('/{record}/edit'),
         ];
     }
+
+    /**
+     * @return Builder<RoleContract>
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        /** @var Builder<RoleContract> $query */
+        $query = parent::getEloquentQuery();
+
+        return $query->with('users');
+    }
 }
