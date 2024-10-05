@@ -38,7 +38,8 @@
         "phpstan/extension-installer": "^1.4.1",
         "phpstan/phpstan-deprecation-rules": "^1.2",
         "phpstan/phpstan-phpunit": "^1.4",
-        "spatie/laravel-ray": "^1.37.1"
+        "spatie/laravel-ray": "^1.37.1",
+        "ticketswap/phpstan-error-formatter": "^1.1"
     },
     "autoload": {
         "psr-4": {

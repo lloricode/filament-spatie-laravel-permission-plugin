@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Schema\PermissionSchema;
@@ -157,11 +158,11 @@ class RoleResource extends Resource
     }
 
     /**
-     * @return Builder<RoleContract>
+     * @return Builder<RoleContract&Model>
      */
     public static function getEloquentQuery(): Builder
     {
-        /** @var Builder<RoleContract> $query */
+        /** @var Builder<RoleContract&Model> $query */
         $query = parent::getEloquentQuery();
 
         return $query->with('users');

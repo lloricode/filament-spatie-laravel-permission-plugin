@@ -6,16 +6,6 @@ parameters:
 			path: src/Resources/RoleResource.php
 
 		-
-			message: "#^Method Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Schema\\\\PermissionCollection\\:\\:groupByType\\(\\) should return Illuminate\\\\Support\\\\Collection\\<string, Illuminate\\\\Support\\\\Collection\\<int, Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData\\>\\> but returns Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData\\>\\>\\.$#"
-			count: 1
-			path: src/Resources/RoleResource/Schema/PermissionCollection.php
-
-		-
-			message: "#^Method Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Resources\\\\RoleResource\\\\Schema\\\\PermissionCollection\\:\\:groupByTypeThenParent\\(\\) should return Illuminate\\\\Support\\\\Collection\\<string, Illuminate\\\\Support\\\\Collection\\<string, Illuminate\\\\Support\\\\Collection\\<int, Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData\\>\\>\\> but returns Illuminate\\\\Support\\\\Collection\\<string, Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData\\>\\>\\>\\.$#"
-			count: 1
-			path: src/Resources/RoleResource/Schema/PermissionCollection.php
-
-		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData, Closure\\(Spatie\\\\Permission\\\\Contracts\\\\Permission\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData given\\.$#"
 			count: 1
 			path: src/Resources/RoleResource/Schema/PermissionCollection.php
