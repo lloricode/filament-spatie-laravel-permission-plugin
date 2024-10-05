@@ -3,6 +3,11 @@
 declare(strict_types=1);
 
 return [
+
+    'defaults' => [
+        'guard' => 'web',
+    ],
+
     /**
      * You can add as many guards as you want with as many role names as you want,
      * as long as super admin and admin are required.

@@ -10,7 +10,7 @@ final class PermissionConfig
 {
     public static function defaultGuardName(): string
     {
-        return Config::string('auth.defaults.guard');
+        return Config::string('filament-permission.defaults.guard');
     }
 
     public static function superAdmin(?string $guardName = null): string
