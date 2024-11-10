@@ -55,8 +55,8 @@
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyse": "vendor/bin/phpstan analyse",
         "analyse-generate-baseline": "vendor/bin/phpstan analyse --generate-baseline",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
+        "test": "vendor/bin/pest -p --processes=6",
+        "test-coverage": "vendor/bin/pest -p --processes=6 --coverage",
         "format": "vendor/bin/pint"
     },
     "config": {
