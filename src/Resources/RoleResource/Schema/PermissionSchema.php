@@ -254,7 +254,7 @@ final class PermissionSchema
                 }
             )
             ->afterStateUpdated(
-                function (Set $set, Get $get, RoleContract $record): void {
+                function (Set $set, Get $get, ?RoleContract $record): void {
                     self::refreshToggleSelectAllState(
                         record: $record,
                         set: $set,
