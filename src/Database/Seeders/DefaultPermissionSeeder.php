@@ -30,7 +30,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
             PermissionConfig::defaultGuardName() => new PermissionSeeder(
                 resources: $this->getPermissionsFromResourceModelPolicies(),
                 panels: $this->getPermissionsFromPanels(),
-                pages: $this->getPermissionsFromPages(),
+                pages: self::getPermissionsFromPages(),
                 widgets: $this->getPermissionsFromWidgets(),
                 customs: self::getCustomPermissionNames(PermissionConfig::defaultGuardName())
             ),

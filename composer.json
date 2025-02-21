@@ -38,6 +38,7 @@
         "phpstan/extension-installer": "^1.4.1",
         "phpstan/phpstan-deprecation-rules": "^2.0.1",
         "phpstan/phpstan-phpunit": "^2.0.4",
+        "rector/rector": "^2.0",
         "spatie/laravel-ray": "^1.37.1",
         "ticketswap/phpstan-error-formatter": "^1.1"
     },
@@ -57,7 +58,9 @@
         "analyse-generate-baseline": "vendor/bin/phpstan analyse --generate-baseline",
         "test": "vendor/bin/pest -p --processes=6",
         "test-coverage": "vendor/bin/pest -p --processes=6 --coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "refactor": "vendor/bin/rector process",
+        "refactor-dry-run": "vendor/bin/rector process --dry-run"
     },
     "config": {
         "sort-packages": true,
