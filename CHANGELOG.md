@@ -2,6 +2,10 @@
 
 All notable changes to `filament-spatie-laravel-permission-plugin` will be documented in this file.
 
+## v1.1.4 - 2025-02-21
+
+**Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v1.1.3...v1.1.4
+
 ## v1.1.3 - laravel 12 support - 2025-02-21
 
 ### What's Changed
