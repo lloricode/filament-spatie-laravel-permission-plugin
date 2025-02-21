@@ -4,6 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/lloricode/filament-spatie-laravel-permission-plugin/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/lloricode/filament-spatie-laravel-permission-plugin/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/lloricode/filament-spatie-laravel-permission-plugin/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/lloricode/filament-spatie-laravel-permission-plugin/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/lloricode/filament-spatie-laravel-permission-plugin.svg?style=flat-square)](https://packagist.org/packages/lloricode/filament-spatie-laravel-permission-plugin)
+[![codecov](https://codecov.io/gh/lloricode/filament-spatie-laravel-permission-plugin/graph/badge.svg?token=Z0BXJ4LVL3)](https://codecov.io/gh/lloricode/filament-spatie-laravel-permission-plugin)
 
 ## Requirements
 - Laravel 11.20+
