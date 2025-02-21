@@ -8,6 +8,7 @@ use Filament\Panel;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionGenerateName;
 
+/** @phpstan-ignore trait.unused */
 trait PermissionUser
 {
     public function isAdminOrSuperAdmin(?string $guardName = null): bool

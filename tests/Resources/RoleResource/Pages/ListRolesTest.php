@@ -17,9 +17,9 @@ beforeEach(function () {
 });
 
 it('can render index', function () {
-    get(RoleResource::getUrl())
-        ->assertOk();
-});
+get(RoleResource::getUrl())
+->assertOk();
+    });
 
 it('can index list', function () {
 

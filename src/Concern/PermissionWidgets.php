@@ -7,6 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Concern;
 use Filament\Facades\Filament;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionGenerateName;
 
+/** @phpstan-ignore trait.unused */
 trait PermissionWidgets
 {
     public static function canView(): bool

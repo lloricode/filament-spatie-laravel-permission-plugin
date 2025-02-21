@@ -121,15 +121,21 @@ abstract class BasePermissionSeeder extends Seeder
             ->reject(fn (string $functionName) => $reject->search($functionName) !== false)
             ->toArray();
 
+        /** @var non-falsy-string $resourceName */
+        $resourceName = (string) Str::of($modelPolicy)
+            ->classBasename()
+            ->replace('Policy', '')
+            ->camel();
+
         return self::generatePermissionGroup(
-            (string) Str::of($modelPolicy)
-                ->classBasename()
-                ->replace('Policy', '')
-                ->camel(),
+            $resourceName,
             $permissions
         );
     }
 
+    /**
+     * @param  non-falsy-string  $resourceName
+     */
     protected static function generatePermissionGroup(string $resourceName, array $permissions): array
     {
         return collect($permissions)
