@@ -17,11 +17,11 @@ jobs:
         laravel: [^12.0. ^11.20]
         stability: [prefer-lowest, prefer-stable]
         include:
-          - laravel: ^11.20
-            testbench: ^9.2
-            carbon: ^2.75.5
           - laravel: ^12.0
             testbench: ^10.0
+            carbon: ^2.75.5
+          - laravel: ^11.20
+            testbench: ^9.2
             carbon: ^2.75.5
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
@@ -51,4 +51,7 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: vendor/bin/pest -p --ci
+        run: vendor/bin/pest -p --ci --coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
