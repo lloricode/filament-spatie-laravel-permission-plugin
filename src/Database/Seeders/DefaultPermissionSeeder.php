@@ -4,43 +4,28 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 
-use Exception;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionWidgets;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Enums\PermissionType;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentPermissionGenerateName;
 
 class DefaultPermissionSeeder extends BasePermissionSeeder
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @throws Exception
-     */
-    #[\Override]
-    protected function permissionsByGuard(): array
+    /** {@inheritdoc} */
+    protected static function panelNames(): array
     {
-        return [
-            PermissionConfig::defaultGuardName() => new PermissionSeeder(
-                resources: $this->getPermissionsFromResourceModelPolicies(),
-                panels: $this->getPermissionsFromPanels(),
-                pages: self::getPermissionsFromPages(),
-                widgets: $this->getPermissionsFromWidgets(),
-                customs: self::getCustomPermissionNames(PermissionConfig::defaultGuardName())
-            ),
-        ];
+        return Filament::getPanels();
     }
 
-    /** @return array<int, string> */
+    /** {@inheritdoc} */
     protected function getPermissionsFromPanels(): array
     {
-        return collect(Filament::getPanels())
+        return collect(static::panelNames())
             ->map(fn (Panel $panel) => FilamentPermissionGenerateName::getPanelPermissionName($panel))
             ->prepend(PermissionType::panels->value)
             ->values()
@@ -48,7 +33,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
             ->toArray();
     }
 
-    /** @return array<int, ResourceSeeder> */
+    /** {@inheritdoc} */
     protected function getPermissionsFromResourceModelPolicies(): array
     {
         $permissionsByPolicy = collect();
@@ -80,7 +65,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         return $permissionsByPolicy->sort()->toArray();
     }
 
-    /** @return array<int, string> */
+    /** {@inheritdoc} */
     protected function getPermissionsFromWidgets(): array
     {
         $permissionNames = collect();
@@ -100,8 +85,8 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         return $permissionNames->sort()->toArray();
     }
 
-    /** @return array<int, string> */
-    private static function getPermissionsFromPages(): array
+    /** {@inheritdoc} */
+    protected static function getPermissionsFromPages(): array
     {
         $permissionNames = collect();
 
@@ -120,7 +105,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         return $permissionNames->sort()->toArray();
     }
 
-    /** @return array<int, string> */
+    /** {@inheritdoc} */
     protected function getCustomPermissionNames(string $guardName): array
     {
         $customs = collect(PermissionConfig::customPermissionsNames($guardName))

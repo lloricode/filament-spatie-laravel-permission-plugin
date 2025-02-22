@@ -6,6 +6,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\PermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Support\ResourceSeeder;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
@@ -18,10 +19,28 @@ abstract class BasePermissionSeeder extends Seeder
         protected readonly PermissionContract $permissionContract,
     ) {}
 
-    /**
-     * @return array<string, PermissionSeeder>
-     */
-    abstract protected function permissionsByGuard(): array;
+    /** @return array<string, \Filament\Panel> */
+    abstract protected static function panelNames(): array;
+
+    /** @return array<int, string> */
+    abstract protected function getPermissionsFromPanels(): array;
+
+    /** @return array<int, ResourceSeeder> */
+    abstract protected function getPermissionsFromResourceModelPolicies(): array;
+
+    /** @return array<int, string> */
+    abstract protected function getPermissionsFromWidgets(): array;
+
+    /** @return array<int, string> */
+    abstract protected static function getPermissionsFromPages(): array;
+
+    /** @return array<int, string> */
+    abstract protected function getCustomPermissionNames(string $guardName): array;
+
+    protected static function guardName(): string
+    {
+        return PermissionConfig::defaultGuardName();
+    }
 
     public function run(): void
     {
@@ -71,6 +90,19 @@ abstract class BasePermissionSeeder extends Seeder
                 }
             );
 
+    }
+
+    protected function permissionsByGuard(): array
+    {
+        return [
+            static::guardName() => new PermissionSeeder(
+                resources: $this->getPermissionsFromResourceModelPolicies(),
+                panels: $this->getPermissionsFromPanels(),
+                pages: static::getPermissionsFromPages(),
+                widgets: $this->getPermissionsFromWidgets(),
+                customs: static::getCustomPermissionNames(static::guardName())
+            ),
+        ];
     }
 
     /**
