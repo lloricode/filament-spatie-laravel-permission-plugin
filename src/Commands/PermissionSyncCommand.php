@@ -14,7 +14,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand('permission:sync')]
 class PermissionSyncCommand extends Command
 {
-    public function handle(): int
+    public function handle(PermissionRegistrar $permissionRegistrar): int
     {
         $this->call('db:seed', [
             '--class' => Config::string('filament-permission.seeders.permissions', DefaultPermissionSeeder::class),
@@ -26,7 +26,7 @@ class PermissionSyncCommand extends Command
             '--force' => true,
         ]);
 
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
+        $permissionRegistrar->forgetCachedPermissions();
 
         $this->components->info('Done seeding roles and permissions.');
 
