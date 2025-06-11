@@ -16,9 +16,6 @@ parameters:
     checkOctaneCompatibility: true
     checkModelProperties: true
 
-    parallel:
-            maximumNumberOfProcesses: 6
-
     errorFormat: ticketswap
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
 
