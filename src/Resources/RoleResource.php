@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources;
 
+use BackedEnum;
 use Exception;
+use Filament\Actions;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
+use Filament\Schemas;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +19,7 @@ use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Schema\PermissionSchema;
 use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
 class RoleResource extends Resource
@@ -24,11 +27,14 @@ class RoleResource extends Resource
     #[\Override]
     public static function getModel(): string
     {
-        return app(PermissionRegistrar::class)
+        /** @var class-string<Permission> $model */
+        $model = app(PermissionRegistrar::class)
             ->getRoleClass();
+
+        return $model;
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-shield-check';
 
     protected static ?int $navigationSort = 2;
 
@@ -41,7 +47,7 @@ class RoleResource extends Resource
     }
 
     #[\Override]
-    public static function form(Form $form): Form
+    public static function form(Schemas\Schema $schema): Schemas\Schema
     {
         $guards = collect([config('auth.defaults.guard')]);
 
@@ -58,11 +64,11 @@ class RoleResource extends Resource
             );
         };
 
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make()
+                Schemas\Components\Section::make()
                     ->schema([
-                        Forms\Components\Grid::make()
+                        Schemas\Components\Grid::make()
                             ->schema([
                                 Forms\Components\TextInput::make('name')
                                     ->translateLabel()
@@ -85,7 +91,7 @@ class RoleResource extends Resource
                                     ->reactive(),
                             ]),
                     ]),
-                Forms\Components\Section::make(trans('Permissions'))
+                Schemas\Components\Section::make(trans('Permissions'))
                     ->schema(fn (Get $get) => PermissionSchema::schema($get('guard_name'))),
             ])->columns(1);
     }
@@ -129,12 +135,12 @@ class RoleResource extends Resource
                     ->since()
                     ->dateTimeTooltip(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                Actions\ViewAction::make(),
+                Actions\EditAction::make(),
 
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\DeleteAction::make()
+                Actions\ActionGroup::make([
+                    Actions\DeleteAction::make()
 //                        ->disabled(fn (RoleContract $record): bool => $record->users->isNotEmpty())
                         ->tooltip(
                             fn (RoleContract $record): ?string => $record->users->isNotEmpty()

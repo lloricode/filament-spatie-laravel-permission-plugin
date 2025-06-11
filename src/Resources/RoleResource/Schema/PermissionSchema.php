@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Schema;
 
 use Filament\Forms;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Infolists;
+use Filament\Schemas;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
@@ -22,7 +24,7 @@ final class PermissionSchema
     {
         if (blank($guardName)) {
             return [
-                Forms\Components\Placeholder::make(trans('Select guard name first before selecting permissions')),
+                Infolists\Components\TextEntry::make()->state(trans('Select guard name first before selecting permissions')),
             ];
         }
 
@@ -31,7 +33,7 @@ final class PermissionSchema
 
         if (PermissionCollection::groupByTypeThenParent(self::$guardName)->isEmpty()) {
             return [
-                Forms\Components\Placeholder::make(trans('No Permission on guard name :guard_name', ['guard_name' => self::$guardName])),
+                Infolists\Components\TextEntry::make()->state(trans('No Permission on guard name :guard_name', ['guard_name' => self::$guardName])),
             ];
         }
 
@@ -114,12 +116,12 @@ final class PermissionSchema
                     $set('select_all', $all);
                 }),
 
-            Forms\Components\Tabs::make()
+            Schemas\Components\Tabs::make()
                 ->tabs([
-                    Forms\Components\Tabs\Tab::make(trans('Resources'))
+                    Schemas\Components\Tabs\Tab::make(trans('Resources'))
 //                        ->badge(111)
                         ->schema([
-                            Forms\Components\Grid::make()
+                            Schemas\Components\Grid::make()
                                 ->schema(function () {
                                     $return = [];
 
@@ -130,7 +132,7 @@ final class PermissionSchema
                                     return $return;
                                 }),
                         ]),
-                    Forms\Components\Tabs\Tab::make(trans('Panels'))
+                    Schemas\Components\Tabs\Tab::make(trans('Panels'))
                         ->schema(function () {
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::panels->value] ?? [] as $parentPermission => $permissionsDatas) {
@@ -139,7 +141,7 @@ final class PermissionSchema
 
                             return [];
                         }),
-                    Forms\Components\Tabs\Tab::make(trans('Pages'))
+                    Schemas\Components\Tabs\Tab::make(trans('Pages'))
                         ->schema(function () {
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::pages->value] ?? [] as $parentPermission => $permissionsDatas) {
@@ -148,7 +150,7 @@ final class PermissionSchema
 
                             return [];
                         }),
-                    Forms\Components\Tabs\Tab::make(trans('Widgets'))
+                    Schemas\Components\Tabs\Tab::make(trans('Widgets'))
                         ->schema(function () {
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::widgets->value] ?? [] as $parentPermission => $permissionsDatas) {
@@ -157,7 +159,7 @@ final class PermissionSchema
 
                             return [];
                         }),
-                    Forms\Components\Tabs\Tab::make(trans('Custom permissions'))
+                    Schemas\Components\Tabs\Tab::make(trans('Custom permissions'))
                         ->schema(function () {
 
                             foreach (PermissionCollection::groupByTypeThenParent(self::$guardName)[PermissionType::customs->value] ?? [] as $parentPermission => $permissionsDatas) {
@@ -174,9 +176,9 @@ final class PermissionSchema
     /**
      * @param  CollectionSupport<int, PermissionData>  $permissionsDatas
      */
-    private static function resourceAbilities(CollectionSupport $permissionsDatas, string $parentPermission): Forms\Components\Section
+    private static function resourceAbilities(CollectionSupport $permissionsDatas, string $parentPermission): Schemas\Components\Section
     {
-        return Forms\Components\Section::make(Str::headline($parentPermission))
+        return Schemas\Components\Section::make(Str::headline($parentPermission))
             ->translateLabel()
 //            ->description('')
             ->collapsible()
