@@ -2,6 +2,14 @@
 
 All notable changes to `filament-spatie-laravel-permission-plugin` will be documented in this file.
 
+## v1.1.5 - 2025-06-11
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/lloricode/filament-spatie-laravel-permission-plugin/pull/4
+
+**Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v1.1.4...v1.1.5
+
 ## v1.1.4 - 2025-02-21
 
 **Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v1.1.3...v1.1.4
