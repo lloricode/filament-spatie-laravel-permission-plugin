@@ -9,6 +9,7 @@ use Filament\Infolists;
 use Filament\Schemas;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
@@ -71,8 +72,8 @@ final class PermissionSchema
 
             Forms\Components\Toggle::make('select_all')
                 ->translateLabel()
-                ->onIcon('heroicon-s-shield-check')
-                ->offIcon('heroicon-s-shield-exclamation')
+                ->onIcon(Heroicon::OutlinedShieldCheck)
+                ->offIcon(Heroicon::OutlinedShieldExclamation)
                 ->helperText(trans('Enable all Permissions for this role'))
                 ->reactive()
                 ->dehydrated(false)

@@ -11,6 +11,8 @@ use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Support\Colors\Color;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,7 +36,7 @@ class RoleResource extends Resource
         return $model;
     }
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-shield-check';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 
     protected static ?int $navigationSort = 2;
 
@@ -49,7 +51,6 @@ class RoleResource extends Resource
     #[\Override]
     public static function form(Schemas\Schema $schema): Schemas\Schema
     {
-        $guards = collect([config('auth.defaults.guard')]);
 
         $readOnly = function (?RoleContract $record): bool {
 
@@ -82,9 +83,9 @@ class RoleResource extends Resource
                                     ->translateLabel()
                                     ->required()
                                     ->disabled($readOnly)
-                                    ->in($guards)
+                                    ->in(fn () => collect([config()->string('auth.defaults.guard')]))
                                     ->options(
-                                        $guards
+                                        fn () => collect([config()->string('auth.defaults.guard')])
                                             ->mapWithKeys(fn (string $guardName) => [$guardName => $guardName])
                                     )
                                     ->default(PermissionConfig::defaultGuardName())
@@ -106,7 +107,7 @@ class RoleResource extends Resource
                     ->translateLabel()
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => Str::headline($state))
-                    ->colors(['primary'])
+                    ->color(Color::Blue)
                     ->searchable()
                     ->sortable(),
 
@@ -119,14 +120,14 @@ class RoleResource extends Resource
                     ->translateLabel()
                     ->badge()
                     ->counts('permissions')
-                    ->colors(['success'])
+                    ->color(Color::Green)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('users_count')
                     ->translateLabel()
                     ->badge()
                     ->counts('users')
-                    ->colors(['success'])
+                    ->color(Color::Green)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
