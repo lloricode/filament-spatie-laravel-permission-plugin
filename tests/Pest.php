@@ -17,8 +17,6 @@ uses(
     LazilyRefreshDatabase::class
 )
     ->beforeEach(function () {
-        /** @see https://freek.dev/1325-when-to-use-gateafter-in-laravel */
-        Gate::after(fn (User $user) => $user->isSuperAdmin() || null);
 
         seed([
             DefaultRoleSeeder::class,
