@@ -1,0 +1,20 @@
+name: Format Dry Run (Pint)
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - 'pint.json'
+  pull_request:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: "Run formatter"
+        uses: aglipanci/laravel-pint-action@2.6
+        with:
+          testMode: true
+          useComposer: true
+          parallel: true
