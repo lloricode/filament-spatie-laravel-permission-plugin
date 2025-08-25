@@ -19,7 +19,7 @@
 /phpstan-baseline.neon  export-ignore
 /phpstan.neon           export-ignore
 /postcss.config.js      export-ignore
-/phpunit.xml.dist       export-ignore
+/phpunit.xml            export-ignore
 /pint.json              export-ignore
 /psalm.xml              export-ignore
 /psalm.xml.dist         export-ignore
