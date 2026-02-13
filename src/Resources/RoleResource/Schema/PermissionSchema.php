@@ -42,7 +42,7 @@ final class PermissionSchema
 
             Forms\Components\Hidden::make('permissions')
                 ->afterStateHydrated(function (Forms\Components\Hidden $component, ?RoleContract $record): void {
-                    $component->state($record ? $record->permissions->pluck('name') : []);
+                    $component->state($record?->permissions->pluck('name') ?? []);
                 })
                 ->dehydrateStateUsing(
                     function (Get $get): array {

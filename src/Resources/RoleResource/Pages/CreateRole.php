@@ -17,7 +17,7 @@ class CreateRole extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         /** @var RoleContract&Model $role */
-        $role = app(RoleContract::class)->findOrCreate(
+        $role = app(RoleContract::class)::findOrCreate(
             name: $data['name'],
             guardName: $data['guard_name'],
         );

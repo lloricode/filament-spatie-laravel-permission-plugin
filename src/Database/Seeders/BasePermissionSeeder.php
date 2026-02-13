@@ -75,8 +75,8 @@ abstract class BasePermissionSeeder extends Seeder
                         count($allPermissionNames)
                     ));
 
-                    $this->permissionContract
-                        ->where('guard_name', $guardName)
+                    /** @phpstan-ignore staticMethod.dynamicCall */
+                    $this->permissionContract::where('guard_name', $guardName)
                         ->whereNotIn('name', $allPermissionNames)
                         ->delete();
 
@@ -190,7 +190,7 @@ abstract class BasePermissionSeeder extends Seeder
 
         $permissionNames->sort()->each(
             function (string $permission) use ($guardName, $output) {
-                $this->permissionContract->findOrCreate(name: $permission, guardName: $guardName);
+                $this->permissionContract::findOrCreate(name: $permission, guardName: $guardName);
                 $output->progressAdvance();
             }
         );
@@ -215,7 +215,7 @@ abstract class BasePermissionSeeder extends Seeder
 
         $permissionNames->sort()->each(
             function (string $permission) use ($guardName, $output) {
-                $this->permissionContract->findOrCreate(name: $permission, guardName: $guardName);
+                $this->permissionContract::findOrCreate(name: $permission, guardName: $guardName);
                 $output->progressAdvance();
             }
         );

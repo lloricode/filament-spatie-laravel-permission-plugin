@@ -24,14 +24,13 @@ class DefaultRoleSeeder extends Seeder
         foreach (PermissionConfig::roleNamesGroupByGuardName() as $guardName => $roleNames) {
 
             foreach ($roleNames as $roleName) {
-                $role = $this->roleContract->findOrCreate(
+                $role = $this->roleContract::findOrCreate(
                     name: $roleName,
                     guardName: $guardName,
                 );
                 if (PermissionConfig::admin($guardName) === $roleName) {
                     $role->givePermissionTo(
-                        $this->permissionContract
-                            ->where('guard_name', $guardName)
+                        $this->permissionContract::where('guard_name', $guardName)
                             ->pluck('name')
                     );
                 }
