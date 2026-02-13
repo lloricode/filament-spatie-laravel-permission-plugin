@@ -167,6 +167,7 @@ class RoleResource extends Resource
     /**
      * @return Builder<RoleContract&Model>
      */
+    #[\Override]
     public static function getEloquentQuery(): Builder
     {
         /** @var Builder<RoleContract&Model> $query */

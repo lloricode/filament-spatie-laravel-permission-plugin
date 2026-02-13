@@ -36,6 +36,7 @@ final class PermissionCollection
     /** @return CollectionSupport<string, CollectionSupport<string, CollectionSupport<int, PermissionData>>> */
     public static function groupByTypeThenParent(string $guardName): CollectionSupport
     {
+        /** @phpstan-ignore return.type */
         return self::groupByType($guardName)
             ->mapWithKeys(
                 fn (CollectionSupport $permissionDatas, string $type): array => [

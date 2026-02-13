@@ -29,6 +29,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasPermissi
         'remember_token',
     ];
 
+    #[\Override]
     protected function casts(): array
     {
         return [

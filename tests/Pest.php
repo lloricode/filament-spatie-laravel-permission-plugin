@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultPermissionSeeder;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\DefaultRoleSeeder;
-use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\Models\User;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\TestCase;
 
 use function Pest\Laravel\seed;
