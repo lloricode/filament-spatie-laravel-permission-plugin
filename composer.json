@@ -38,6 +38,7 @@
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan-deprecation-rules": "^2.0.3",
         "phpstan/phpstan-phpunit": "^2.0.6",
+        "phpstan/phpstan-strict-rules": "^2.0",
         "rector/rector": "^2.0.17",
         "spatie/laravel-ray": "^1.40.2",
         "ticketswap/phpstan-error-formatter": "^1.1.5"

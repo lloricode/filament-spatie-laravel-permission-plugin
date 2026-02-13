@@ -7,6 +7,8 @@ rules:
 
 parameters:
     level: 8
+    strictRules:
+        allRules: false
     paths:
         - src
         - config

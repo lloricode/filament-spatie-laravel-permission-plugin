@@ -73,6 +73,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         foreach (Filament::getWidgets() as $widget) {
             if (app($widget) instanceof HasPermissionWidgets) {
                 /** @var HasPermissionWidgets|class-string<HasPermissionWidgets> $widget */
+                /** @phpstan-ignore varTag.type */
                 $permissionNames->push(FilamentPermissionGenerateName::getWidgetPermissionName($widget));
             }
         }
@@ -94,6 +95,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         foreach (Filament::getPages() as $page) {
             if (app($page) instanceof HasPermissionPages && $page::canBeSeed()) {
                 /** @var HasPermissionPages|class-string<HasPermissionPages> $page */
+                /** @phpstan-ignore varTag.type */
                 $permissionNames->push(FilamentPermissionGenerateName::getPagePermissionName($page));
             }
         }

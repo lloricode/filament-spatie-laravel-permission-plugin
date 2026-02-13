@@ -27,13 +27,10 @@ class EditRole extends EditRecord
         ];
     }
 
-    /**
-     * @param  RoleContract&Model  $record
-     * @return RoleContract&Model
-     */
     #[\Override]
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
+        /** @var RoleContract&Model $record */
         $roleNames = PermissionConfig::roleNamesByGuardName($data['guard_name'] ?? null);
 
         $isExtraRole = in_array($record->name, $roleNames, true);
