@@ -2,6 +2,13 @@
 
 All notable changes to `filament-spatie-laravel-permission-plugin` will be documented in this file.
 
+## v2.1.0 - 2026-02-13
+
+- Add support for spatie/laravel-permission v7
+- Add support for laravel v13
+
+**Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v2.0.1...v2.1.0
+
 ## v2.0.1 - 2026-01-17
 
 ### What's Changed
