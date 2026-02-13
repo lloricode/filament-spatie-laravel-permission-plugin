@@ -1,11 +1,8 @@
 parameters:
 	ignoreErrors:
-		-
-			message: "#^Anonymous function should return string\\|null but returns array\\|string\\|null\\.$#"
-			count: 1
-			path: src/Resources/RoleResource.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Database\\\\Eloquent\\\\Collection\\<\\(int\\|string\\),Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:map\\(\\) expects callable\\(Illuminate\\\\Database\\\\Eloquent\\\\Model, int\\|string\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData, Closure\\(Spatie\\\\Permission\\\\Contracts\\\\Permission\\)\\: Lloricode\\\\FilamentSpatieLaravelPermissionPlugin\\\\Data\\\\PermissionData given\\.$#"
+			rawMessage: 'Parameter #1 $callback of method Illuminate\Database\Eloquent\Collection<(int|string),Illuminate\Database\Eloquent\Model>::map() expects callable(Illuminate\Database\Eloquent\Model, int|string): Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\PermissionData, Closure(Spatie\Permission\Contracts\Permission): Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\PermissionData given.'
+			identifier: argument.type
 			count: 1
 			path: src/Resources/RoleResource/Schema/PermissionCollection.php

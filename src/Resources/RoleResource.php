@@ -144,7 +144,7 @@ class RoleResource extends Resource
                     Actions\DeleteAction::make()
 //                        ->disabled(fn (RoleContract $record): bool => $record->users->isNotEmpty())
                         ->tooltip(
-                            fn (RoleContract $record): ?string => $record->users->isNotEmpty()
+                            fn (RoleContract $record) => $record->users->isNotEmpty()
                                 ? trans('This role has users.')
                                 : null
                         ),
