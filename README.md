@@ -6,10 +6,10 @@
 [![codecov](https://codecov.io/gh/lloricode/filament-spatie-laravel-permission-plugin/graph/badge.svg?token=Z0BXJ4LVL3)](https://codecov.io/gh/lloricode/filament-spatie-laravel-permission-plugin)
 
 ## Requirements
-- Laravel 11.20+
-- PHP 8.2+
-- [Spatie/laravel-permission 6.9+](https://github.com/spatie/laravel-permission/tree/6.9.0)
-- Filament 3.2.98+
+- Laravel 11.20+ and up
+- PHP 8.3+
+- [Spatie/laravel-permission 6.9+ and up](https://github.com/spatie/laravel-permission/tree/6.9.0)
+- Filament 3.2.98+ and up
 
 ## Pre-requisite
 
