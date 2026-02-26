@@ -1,6 +1,6 @@
 {
     "name": "lloricode/filament-spatie-laravel-permission-plugin",
-    "description": "This is my package filament-spatie-laravel-permission-plugin",
+    "description": "Spatie Laravel permission inside of Filament.",
     "keywords": [
         "lloricode",
         "laravel",
