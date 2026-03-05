@@ -101,7 +101,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
         }
 
-        return $permissionsByPolicy->sort()->toArray();
+        return $permissionsByPolicy->sort()->values()->toArray();
     }
 
     /** {@inheritdoc} */
@@ -123,7 +123,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
         $permissionNames->prepend(PermissionType::widgets->value);
 
-        return $permissionNames->sort()->toArray();
+        return $permissionNames->sort()->values()->toArray();
     }
 
     /** {@inheritdoc} */
@@ -145,7 +145,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
         $permissionNames->prepend(PermissionType::pages->value);
 
-        return $permissionNames->sort()->toArray();
+        return $permissionNames->sort()->values()->toArray();
     }
 
     /** {@inheritdoc} */
@@ -159,8 +159,8 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
         }
 
         return $customs->prepend(PermissionType::customs->value)
-            ->values()
             ->sort()
+            ->values()
             ->toArray();
     }
 }
