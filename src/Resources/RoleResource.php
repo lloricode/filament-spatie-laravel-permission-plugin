@@ -16,7 +16,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Schema\PermissionSchema;
@@ -164,15 +163,9 @@ class RoleResource extends Resource
         ];
     }
 
-    /**
-     * @return Builder<RoleContract&Model>
-     */
     #[\Override]
     public static function getEloquentQuery(): Builder
     {
-        /** @var Builder<RoleContract&Model> $query */
-        $query = parent::getEloquentQuery();
-
-        return $query->with('users');
+        return parent::getEloquentQuery()->with('users');
     }
 }

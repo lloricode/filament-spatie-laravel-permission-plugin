@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Resources\RoleResource\Schema;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection as CollectionSupport;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Data\PermissionData;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
