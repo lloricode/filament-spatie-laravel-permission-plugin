@@ -106,7 +106,7 @@ abstract class BasePermissionSeeder extends Seeder
     }
 
     /**
-     * @param  array<int, string>  $permissions
+     * @param  list<non-empty-string>  $permissions
      */
     protected function tablePagesPanelWidgets(string $type, array $permissions): void
     {
@@ -121,7 +121,7 @@ abstract class BasePermissionSeeder extends Seeder
     }
 
     /**
-     * @param  array<int, ResourceSeeder>  $resourceSeeders
+     * @param  list<ResourceSeeder>  $resourceSeeders
      */
     protected function tableResources(array $resourceSeeders): void
     {
@@ -140,7 +140,10 @@ abstract class BasePermissionSeeder extends Seeder
         $output->table(['resource', 'model', 'modelPolicy', 'permissionNames'], $rows);
     }
 
-    /** @param  class-string  $modelPolicy */
+    /**
+     * @param  class-string  $modelPolicy
+     * @return list<non-empty-string>
+     */
     protected static function generateFilamentResourcePermissions(string $modelPolicy): array
     {
         $reject = collect(['before', 'after']);

@@ -7,7 +7,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Suppo
 readonly class ResourceSeeder
 {
     /**
-     * @param  array<int, string>  $permissionNames
+     * @param  list<non-empty-string>  $permissionNames
      */
     public function __construct(
         public string $resource,
