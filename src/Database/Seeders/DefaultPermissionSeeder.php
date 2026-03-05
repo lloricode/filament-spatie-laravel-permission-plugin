@@ -6,6 +6,7 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 
 use Filament\Facades\Filament;
 use Filament\Panel;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Contracts\HasPermissionPages;
@@ -34,20 +35,58 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     }
 
     /** {@inheritdoc} */
+    #[\Override]
     protected function getPermissionsFromResourceModelPolicies(): array
     {
         $permissionsByPolicy = collect();
+        $output = $this->command->getOutput();
 
         foreach (Filament::getResources() as $filamentResource) {
 
-            $modelPolicy = Gate::getPolicyFor($filamentResource::getModel());
+            $modelClass = $filamentResource::getModel();
+
+            foreach ($filamentResource::getRelations() as $relation) {
+                $relationship = $relation::getRelationshipName();
+
+                /** @phpstan-ignore method.dynamicName */
+                $relationModelClass = (new $modelClass)
+                    ->{$relationship}()
+                    ->getModel();
+
+                $relationModelPolicy = Gate::getPolicyFor($relationModelClass);
+                if ($relationModelPolicy === null) {
+                    $output->warning(sprintf(
+                        'Resource [%s] relation [%s] does not have a policy for model [%s].',
+                        $filamentResource,
+                        $relation,
+                        $modelClass
+                    ));
+
+                    continue;
+                }
+
+                $permissionsByPolicy
+                    ->when(
+                        $permissionsByPolicy
+                            ->where('modelPolicy', $relationModelPolicy::class)
+                            ->isEmpty(),
+                        fn (Collection $c) => $c->push(new ResourceSeeder(
+                            resource: $relation,
+                            model: $modelClass,
+                            modelPolicy: $relationModelPolicy::class,
+                            permissionNames: self::generateFilamentResourcePermissions($relationModelPolicy::class)
+                        ))
+                    );
+
+            }
+
+            $modelPolicy = Gate::getPolicyFor($modelClass);
 
             if ($modelPolicy === null) {
-                $output = $this->command->getOutput();
                 $output->warning(sprintf(
                     'Resource [%s] does not have a policy for model [%s].',
                     $filamentResource,
-                    $filamentResource::getModel()
+                    $modelClass
                 ));
 
                 continue;
@@ -55,7 +94,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
             $permissionsByPolicy->push(new ResourceSeeder(
                 resource: $filamentResource,
-                model: $filamentResource::getModel(),
+                model: $modelClass,
                 modelPolicy: $modelPolicy::class,
                 permissionNames: self::generateFilamentResourcePermissions($modelPolicy::class)
             ));

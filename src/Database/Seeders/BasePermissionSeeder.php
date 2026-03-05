@@ -167,13 +167,16 @@ abstract class BasePermissionSeeder extends Seeder
 
     /**
      * @param  non-falsy-string  $resourceName
+     * @return list<non-empty-string>
      */
     protected static function generatePermissionGroup(string $resourceName, array $permissions): array
     {
+        /** @phpstan-ignore return.type */
         return collect($permissions)
-            ->map(fn (string $permission) => "{$resourceName}.{$permission}")
+            ->map(fn (string $permission): string => "{$resourceName}.{$permission}")
             ->prepend($resourceName)
             ->sort()
+            ->values()
             ->toArray();
     }
 
