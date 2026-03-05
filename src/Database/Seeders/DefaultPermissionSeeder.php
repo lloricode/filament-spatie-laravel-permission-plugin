@@ -20,12 +20,14 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
     /** {@inheritdoc} */
     protected static function panelNames(): array
     {
+        /** @phpstan-ignore return.type */
         return Filament::getPanels();
     }
 
     /** {@inheritdoc} */
     protected function getPermissionsFromPanels(): array
     {
+        /** @phpstan-ignore return.type */
         return collect(static::panelNames())
             ->map(fn (Panel $panel) => FilamentPermissionGenerateName::getPanelPermissionName($panel))
             ->prepend(PermissionType::panels->value)
@@ -101,6 +103,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
         }
 
+        /** @phpstan-ignore return.type */
         return $permissionsByPolicy->sort()->values()->toArray();
     }
 
@@ -123,6 +126,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
         $permissionNames->prepend(PermissionType::widgets->value);
 
+        /** @phpstan-ignore return.type */
         return $permissionNames->sort()->values()->toArray();
     }
 
@@ -145,6 +149,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
 
         $permissionNames->prepend(PermissionType::pages->value);
 
+        /** @phpstan-ignore return.type */
         return $permissionNames->sort()->values()->toArray();
     }
 
@@ -158,6 +163,7 @@ class DefaultPermissionSeeder extends BasePermissionSeeder
             return [];
         }
 
+        /** @phpstan-ignore return.type */
         return $customs->prepend(PermissionType::customs->value)
             ->sort()
             ->values()

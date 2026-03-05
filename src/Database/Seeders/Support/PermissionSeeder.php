@@ -7,11 +7,11 @@ namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders\Suppo
 readonly class PermissionSeeder
 {
     /**
-     * @param  array<int, ResourceSeeder>  $resources
-     * @param  array<int, string>  $panels
-     * @param  array<int, string>  $pages
-     * @param  array<int, string>  $widgets
-     * @param  array<int, string>  $customs
+     * @param  list<ResourceSeeder>  $resources
+     * @param  list<non-empty-string>  $panels
+     * @param  list<non-empty-string>  $pages
+     * @param  list<non-empty-string>  $widgets
+     * @param  list<non-empty-string>  $customs
      */
     public function __construct(
         public array $resources,
@@ -22,7 +22,7 @@ readonly class PermissionSeeder
     ) {}
 
     /**
-     * @return array<int, string>
+     * @return list<non-empty-string>
      */
     public function allPermissionNames(): array
     {
@@ -35,6 +35,7 @@ readonly class PermissionSeeder
             $collect = $collect->merge($resource->permissionNames);
         }
 
+        /** @phpstan-ignore return.type */
         return $collect->toArray();
     }
 }

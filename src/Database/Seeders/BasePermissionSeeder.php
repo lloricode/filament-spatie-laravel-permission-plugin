@@ -19,22 +19,22 @@ abstract class BasePermissionSeeder extends Seeder
         protected readonly PermissionContract $permissionContract,
     ) {}
 
-    /** @return array<string, \Filament\Panel> */
+    /** @return array<non-empty-string, \Filament\Panel> */
     abstract protected static function panelNames(): array;
 
-    /** @return array<int, string> */
+    /** @return list<non-empty-string> */
     abstract protected function getPermissionsFromPanels(): array;
 
-    /** @return array<int, ResourceSeeder> */
+    /** @return list<ResourceSeeder> */
     abstract protected function getPermissionsFromResourceModelPolicies(): array;
 
-    /** @return array<int, string> */
+    /** @return list<non-empty-string> */
     abstract protected function getPermissionsFromWidgets(): array;
 
-    /** @return array<int, string> */
+    /** @return list<non-empty-string> */
     abstract protected static function getPermissionsFromPages(): array;
 
-    /** @return array<int, string> */
+    /** @return list<non-empty-string> */
     abstract protected function getCustomPermissionNames(string $guardName): array;
 
     protected static function guardName(): string
@@ -181,7 +181,7 @@ abstract class BasePermissionSeeder extends Seeder
     }
 
     /**
-     * @param  array<int, string>  $permissionNames
+     * @param  list<non-empty-string>  $permissionNames
      */
     protected function seedPanelsPagesWidgets(array $permissionNames, string $guardName): void
     {
@@ -202,7 +202,7 @@ abstract class BasePermissionSeeder extends Seeder
     }
 
     /**
-     * @param  array<int, ResourceSeeder>  $resourcePermissionNames
+     * @param  list<ResourceSeeder>  $resourcePermissionNames
      */
     protected function seedResource(array $resourcePermissionNames, string $guardName): void
     {
