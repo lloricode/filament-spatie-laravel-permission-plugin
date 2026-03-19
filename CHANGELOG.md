@@ -2,6 +2,14 @@
 
 All notable changes to `filament-spatie-laravel-permission-plugin` will be documented in this file.
 
+## v2.2.1 - 2026-03-19
+
+### What's Changed
+
+* Bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/lloricode/filament-spatie-laravel-permission-plugin/pull/12
+
+**Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v2.2.0...v2.2.1
+
 ## v2.2.0 - 2026-03-05
 
 **Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v2.1.0...v2.2.0
