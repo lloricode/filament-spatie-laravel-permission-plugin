@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-return Rector\Config\RectorConfig::configure()
+use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use Rector\Config\RectorConfig;
+
+return RectorConfig::configure()
     ->withPhpSets()
     ->withPaths([
         __DIR__.'/src',
@@ -10,5 +13,5 @@ return Rector\Config\RectorConfig::configure()
     ])
     ->withCache(
         cacheDirectory: 'build/rector',
-        cacheClass: Rector\Caching\ValueObject\Storage\FileCacheStorage::class,
+        cacheClass: FileCacheStorage::class,
     );

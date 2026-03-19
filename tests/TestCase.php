@@ -19,7 +19,6 @@ use Livewire\LivewireServiceProvider;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\FilamentSpatieLaravelPermissionPluginServiceProvider;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Tests\Fixture\TestPanelProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
 class TestCase extends Orchestra
@@ -35,7 +34,6 @@ class TestCase extends Orchestra
     {
         return [
             ActionsServiceProvider::class,
-            BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
             BladeIconsServiceProvider::class,
             FilamentServiceProvider::class,

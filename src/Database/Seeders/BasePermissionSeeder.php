@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lloricode\FilamentSpatieLaravelPermissionPlugin\Database\Seeders;
 
+use Filament\Panel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Lloricode\FilamentSpatieLaravelPermissionPlugin\Config\PermissionConfig;
@@ -19,7 +20,7 @@ abstract class BasePermissionSeeder extends Seeder
         protected readonly PermissionContract $permissionContract,
     ) {}
 
-    /** @return array<non-empty-string, \Filament\Panel> */
+    /** @return array<non-empty-string, Panel> */
     abstract protected static function panelNames(): array;
 
     /** @return list<non-empty-string> */

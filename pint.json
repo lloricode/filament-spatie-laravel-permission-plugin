@@ -4,6 +4,7 @@
         "build"
     ],
     "notPath": [
+        "config/filament-permission.php",
         "ray.php"
     ],
     "cache-file": "build/pint",
