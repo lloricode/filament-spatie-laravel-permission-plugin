@@ -179,9 +179,13 @@ final class PermissionSchema
      */
     private static function resourceAbilities(CollectionSupport $permissionsDatas, string $parentPermission): Schemas\Components\Section
     {
-        return Schemas\Components\Section::make(Str::headline($parentPermission))
-            ->translateLabel()
-//            ->description('')
+        $label = Str::headline($parentPermission);
+
+        if (PermissionConfig::translated()) {
+            $label = trans($label);
+        }
+
+        return Schemas\Components\Section::make($label)
             ->collapsible()
             ->compact()
             ->schema([
