@@ -2,6 +2,15 @@
 
 All notable changes to `filament-spatie-laravel-permission-plugin` will be documented in this file.
 
+## v2.2.3 - 2026-07-20
+
+### What's Changed
+
+* Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/lloricode/filament-spatie-laravel-permission-plugin/pull/17
+* Bump codecov/codecov-action from 6 to 7 by @dependabot[bot] in https://github.com/lloricode/filament-spatie-laravel-permission-plugin/pull/16
+
+**Full Changelog**: https://github.com/lloricode/filament-spatie-laravel-permission-plugin/compare/v2.2.2...v2.2.3
+
 ## v2.2.2 - Add support for spatie/laravel-permission v8.0 - 2026-05-31
 
 ### What's Changed
